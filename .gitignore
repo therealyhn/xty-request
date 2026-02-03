@@ -13,6 +13,9 @@ dist-ssr
 *.local
 .env
 .env.*
+.env.local
+.env.production
+server/.env
 config.php
 vendor/
 server/storage/

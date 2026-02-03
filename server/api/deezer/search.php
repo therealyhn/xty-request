@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../../lib/SpotifyClient.php';
+require_once __DIR__ . '/../../lib/DeezerClient.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     jsonResponse(['ok' => true], 200);
@@ -41,8 +41,24 @@ $max = (int) (env('RATE_LIMIT_MAX_REQUESTS', '15'));
 $ipKey = md5(getClientIp());
 rateLimit($ipKey, $max, $window);
 
-$data = spotifySearchTracks($query, $limit);
+$items = deezerSearchTracks($query, $limit);
+
+$normalized = array_map(function (array $track) {
+    return [
+        'id' => $track['id'] ?? null,
+        'title' => $track['title'] ?? '',
+        'artist' => [
+            'name' => $track['artist']['name'] ?? '',
+        ],
+        'album' => [
+            'title' => $track['album']['title'] ?? '',
+            'cover_medium' => $track['album']['cover_medium'] ?? '',
+        ],
+        'preview' => $track['preview'] ?? '',
+        'link' => $track['link'] ?? '',
+    ];
+}, $items);
 
 jsonResponse([
-    'data' => $data,
+    'data' => $normalized,
 ], 200);
