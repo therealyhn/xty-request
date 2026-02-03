@@ -1,7 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Container from '../ui/Container.jsx'
-import Chip from '../ui/Chip.jsx'
 import DeezerSearchInput from '../shared/DeezerSearchInput.jsx'
 import SelectedTrackCard from '../shared/SelectedTrackCard.jsx'
 import RequestForm from '../shared/RequestForm.jsx'
@@ -10,10 +9,18 @@ import logo from '../../assets/xty-logo.png'
 export default function RequestFlowSection() {
   const [isUnlocked, setIsUnlocked] = useState(false)
 
+  useEffect(() => {
+    const unlocked = localStorage.getItem('xty_request_unlocked')
+    if (unlocked === 'true') {
+      setIsUnlocked(true)
+    }
+  }, [])
+
   const handleUnlock = () => {
     // Open Instagram in new tab
     window.open('https://www.instagram.com/xty.music/', '_blank')
-    // Unlock the UI
+    // Unlock the UI and persist
+    localStorage.setItem('xty_request_unlocked', 'true')
     setIsUnlocked(true)
   }
 
