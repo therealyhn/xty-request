@@ -1,0 +1,23 @@
+export default function TextInput({
+  id,
+  label,
+  description,
+  className = '',
+  ...props
+}) {
+  return (
+    <div className={`flex flex-col gap-2 ${className}`}>
+      {label ? (
+        <label className="text-label text-secondary" htmlFor={id}>
+          {label}
+        </label>
+      ) : null}
+      <input
+        id={id}
+        className="w-full rounded-surface border border-border-base bg-background/60 px-4 py-3 text-body text-primary outline-none transition focus-visible:ring-2 focus-visible:ring-primary/40"
+        {...props}
+      />
+      {description ? <p className="text-body text-secondary">{description}</p> : null}
+    </div>
+  );
+}
