@@ -14,7 +14,7 @@ export default function TextInput({
       ) : null}
       <input
         id={id}
-        className="w-full rounded-surface border border-border-base bg-background/60 px-4 py-3 text-body text-primary outline-none transition focus-visible:ring-2 focus-visible:ring-primary/40"
+        className="w-full rounded-surface border border-border-base bg-background/60 px-4 py-3 text-body text-primary outline-none transition hover:border-border-strong hover:bg-background/70 focus-visible:ring-2 focus-visible:ring-primary/40"
         {...props}
       />
       {description ? <p className="text-body text-secondary">{description}</p> : null}
