@@ -5,10 +5,10 @@ export default function SelectedTrackCard({ track, onRemove }) {
     return (
       <div className="flex flex-col gap-6 opacity-50">
         <div className="flex items-center justify-between">
-          <h3 className="text-h3 font-semibold">Selected Track</h3>
+          <h3 className="text-h3 font-semibold">Izabrana pesma</h3>
         </div>
-        <div className="rounded-surface border border-b border-border-light bg-background/40 p-6 text-center text-body text-secondary">
-          No track selected. Choose a result to preview it here.
+        <div className="rounded-sm border border-b border-border-light bg-background/40 p-6 text-center text-body text-secondary">
+          Nije izabrana pesma. Izaberite rezultat da biste ga pregledali ovde.
         </div>
       </div>
     )
@@ -17,13 +17,13 @@ export default function SelectedTrackCard({ track, onRemove }) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-h3 font-semibold text-primary">Selected Track</h3>
-        <Chip variant="success">READY TO SUBMIT</Chip>
+        <h3 className="text-h3 font-semibold text-primary uppercase">Izabrana pesma</h3>
+        <Chip variant="success">SPREMAN ZA SLANJE</Chip>
       </div>
 
-      <div className="relative overflow-hidden rounded-surface border border-border-light bg-surface/50 p-4 backdrop-blur-md">
+      <div className="relative overflow-hidden rounded-sm border border-border-light bg-surface/50 p-4 backdrop-blur-md">
         <div className="flex items-center gap-4">
-          <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg shadow-lg">
+          <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-sm shadow-lg">
             <img
               src={track.album?.cover_medium}
               alt={track.title}
@@ -34,7 +34,7 @@ export default function SelectedTrackCard({ track, onRemove }) {
           <div className="flex min-w-0 flex-1 flex-col gap-1">
             <h4 className="truncate text-h3 font-bold text-primary">{track.title}</h4>
             <p className="truncate text-body text-secondary">{track.artist?.name}</p>
-            <p className="truncate text-label text-secondary/70">{track.album?.title}</p>
+            {/* <p className="truncate text-label text-secondary/70">{track.album?.title}</p> */}
           </div>
 
           <button

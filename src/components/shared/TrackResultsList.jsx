@@ -5,7 +5,7 @@ export default function TrackResultsList({ tracks, onSelect }) {
 
     return (
         <div className="flex flex-col gap-2">
-            <h3 className="text-label text-secondary">Search Results</h3>
+            <h3 className="text-label text-secondary">Rezultati pretrage</h3>
             <ul className="max-h-80 overflow-y-auto rounded-surface border border-border-light bg-surface/30 p-2 backdrop-blur-sm">
                 {tracks.map((track) => (
                     <motion.li
@@ -39,7 +39,7 @@ export default function TrackResultsList({ tracks, onSelect }) {
 
                         {/* Select Action */}
                         <div className="opacity-0 transition-opacity group-hover:opacity-100">
-                            <span className="text-label font-bold text-green-500">SELECT</span>
+                            <span className="text-label font-bold text-green-500">IZABERI</span>
                         </div>
                     </motion.li>
                 ))}

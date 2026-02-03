@@ -6,16 +6,18 @@ import TrackResultsList from '../shared/TrackResultsList.jsx'
 import SelectedTrackCard from '../shared/SelectedTrackCard.jsx'
 import RequestForm from '../shared/RequestForm.jsx'
 import logo from '../../assets/xty-logo.png'
-import { searchTracks } from '../../lib/api.js'
+import { useDeezerSearch } from '../../hooks/useDeezerSearch.js'
 
 export default function RequestFlowSection() {
   const [isUnlocked, setIsUnlocked] = useState(false)
 
   // Search State
   const [searchQuery, setSearchQuery] = useState('')
-  const [results, setResults] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
   const [selectedTrack, setSelectedTrack] = useState(null)
+  const { results, isLoading, error } = useDeezerSearch(searchQuery, {
+    debounceMs: 500,
+    limit: 10,
+  })
 
   useEffect(() => {
     const unlocked = localStorage.getItem('xty_request_unlocked')
@@ -23,28 +25,6 @@ export default function RequestFlowSection() {
       setIsUnlocked(true)
     }
   }, [])
-
-  // Debounced Search Effect
-  useEffect(() => {
-    const timer = setTimeout(async () => {
-      if (searchQuery.trim().length >= 2) {
-        setIsLoading(true)
-        try {
-          const tracks = await searchTracks(searchQuery)
-          setResults(tracks)
-        } catch (error) {
-          console.error("Search failed", error)
-          setResults([])
-        } finally {
-          setIsLoading(false)
-        }
-      } else {
-        setResults([])
-      }
-    }, 500) // 500ms debounce
-
-    return () => clearTimeout(timer)
-  }, [searchQuery])
 
   const handleUnlock = () => {
     window.open('https://www.instagram.com/xty.music/', '_blank')
@@ -54,7 +34,6 @@ export default function RequestFlowSection() {
 
   const handleTrackSelect = (track) => {
     setSelectedTrack(track)
-    setResults([]) // Clear results on selection
     setSearchQuery('') // Optional: clear query
   }
 
@@ -89,7 +68,7 @@ export default function RequestFlowSection() {
             </div>
 
             <h1 className="bg-text-glow bg-clip-text text-center font-heading text-5xl font-bold tracking-tighter text-transparent sm:text-7xl md:text-8xl">
-              REQUEST LINK
+              NARUČI PESMU
             </h1>
           </div>
 
@@ -109,7 +88,7 @@ export default function RequestFlowSection() {
 
                   <div className="relative z-10 flex flex-col gap-6">
                     <div>
-                      <h3 className="mb-2 text-2xl font-bold text-primary">Prvo zaprati Instagram</h3>
+                      <h3 className="mb-2 text-2xl font-bold text-primary">ZAPRATI NAS</h3>
                       <p className="text-body text-secondary">
                         Da bi mogao/la da naručiš pesmu, potrebno je da zapratiš našu stranicu.
                       </p>
@@ -119,7 +98,23 @@ export default function RequestFlowSection() {
                       onClick={handleUnlock}
                       className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-xs bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-4 text-lg font-bold text-white transition-all hover:scale-[1.02] hover:shadow-[0_0_40px_-10px_rgba(168,85,247,0.5)] active:scale-[0.98]"
                     >
-                      <span className="relative z-10">ZAPRATI @XTY.MUSIC</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="relative z-10 h-6 w-6"
+                      >
+                        <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                        <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                      </svg>
+                      <span className="relative z-10">XTY MUSIC</span>
                       <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
                     </button>
 
@@ -140,12 +135,18 @@ export default function RequestFlowSection() {
                 <div className="flex flex-col gap-8">
                   {/* Search Section */}
                   <div className="rounded-sm border border-border-base bg-surface/50 p-1 backdrop-blur-xl">
-                    <DeezerSearchInput
-                      value={searchQuery}
-                      onChange={setSearchQuery}
-                      isLoading={isLoading}
-                      disabled={!!selectedTrack}
-                    />
+                    <div
+                      className={`transition-all duration-300 ${
+                        selectedTrack ? 'pointer-events-none opacity-50 blur-[2px]' : ''
+                      }`}
+                    >
+                      <DeezerSearchInput
+                        value={searchQuery}
+                        onChange={setSearchQuery}
+                        isLoading={isLoading}
+                        disabled={!!selectedTrack}
+                      />
+                    </div>
 
                     {/* Results List */}
                     <div className="mt-2 text-left">
@@ -153,6 +154,11 @@ export default function RequestFlowSection() {
                         tracks={results}
                         onSelect={handleTrackSelect}
                       />
+                      {error ? (
+                        <p className="mt-3 text-body text-secondary">
+                          Search failed. Try again.
+                        </p>
+                      ) : null}
                     </div>
                   </div>
 
