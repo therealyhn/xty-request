@@ -2,12 +2,20 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Container from '../ui/Container.jsx'
 import DeezerSearchInput from '../shared/DeezerSearchInput.jsx'
+import TrackResultsList from '../shared/TrackResultsList.jsx'
 import SelectedTrackCard from '../shared/SelectedTrackCard.jsx'
 import RequestForm from '../shared/RequestForm.jsx'
 import logo from '../../assets/xty-logo.png'
+import { searchTracks } from '../../lib/api.js'
 
 export default function RequestFlowSection() {
   const [isUnlocked, setIsUnlocked] = useState(false)
+
+  // Search State
+  const [searchQuery, setSearchQuery] = useState('')
+  const [results, setResults] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [selectedTrack, setSelectedTrack] = useState(null)
 
   useEffect(() => {
     const unlocked = localStorage.getItem('xty_request_unlocked')
@@ -16,12 +24,42 @@ export default function RequestFlowSection() {
     }
   }, [])
 
+  // Debounced Search Effect
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (searchQuery.trim().length >= 2) {
+        setIsLoading(true)
+        try {
+          const tracks = await searchTracks(searchQuery)
+          setResults(tracks)
+        } catch (error) {
+          console.error("Search failed", error)
+          setResults([])
+        } finally {
+          setIsLoading(false)
+        }
+      } else {
+        setResults([])
+      }
+    }, 500) // 500ms debounce
+
+    return () => clearTimeout(timer)
+  }, [searchQuery])
+
   const handleUnlock = () => {
-    // Open Instagram in new tab
     window.open('https://www.instagram.com/xty.music/', '_blank')
-    // Unlock the UI and persist
     localStorage.setItem('xty_request_unlocked', 'true')
     setIsUnlocked(true)
+  }
+
+  const handleTrackSelect = (track) => {
+    setSelectedTrack(track)
+    setResults([]) // Clear results on selection
+    setSearchQuery('') // Optional: clear query
+  }
+
+  const handleTrackRemove = () => {
+    setSelectedTrack(null)
   }
 
   return (
@@ -31,7 +69,7 @@ export default function RequestFlowSection() {
 
           {/* Header Section */}
           <div className="flex flex-col items-center gap-6">
-            <div className="flex items-center gap-3 rounded-xs border border-border-base bg-surface/50 px-4 py-1.5 backdrop-blur-sm">
+            <div className="flex items-center gap-3 rounded-sm border border-border-base bg-surface/50 px-4 py-1.5 backdrop-blur-sm">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75"></span>
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
@@ -40,7 +78,7 @@ export default function RequestFlowSection() {
             </div>
 
             <div className="relative">
-              <div className="absolute -inset-4 rounded-xs bg-white/5 opacity-0 blur-2xl transition-opacity duration-500 hover:opacity-10" />
+              <div className="absolute -inset-4 rounded-full bg-white/5 opacity-0 blur-2xl transition-opacity duration-500 hover:opacity-10" />
               <img
                 src={logo}
                 alt="XTY logo"
@@ -101,14 +139,34 @@ export default function RequestFlowSection() {
               >
                 <div className="flex flex-col gap-8">
                   {/* Search Section */}
-                  <div className="rounded-3xl border border-border-base bg-surface/50 p-1 backdrop-blur-xl">
-                    <DeezerSearchInput />
+                  <div className="rounded-sm border border-border-base bg-surface/50 p-1 backdrop-blur-xl">
+                    <DeezerSearchInput
+                      value={searchQuery}
+                      onChange={setSearchQuery}
+                      isLoading={isLoading}
+                      disabled={!!selectedTrack}
+                    />
+
+                    {/* Results List */}
+                    <div className="mt-2 text-left">
+                      <TrackResultsList
+                        tracks={results}
+                        onSelect={handleTrackSelect}
+                      />
+                    </div>
                   </div>
 
                   {/* Dynamic Content */}
                   <div className="flex flex-col gap-8">
-                    <SelectedTrackCard />
-                    <RequestForm />
+                    <SelectedTrackCard
+                      track={selectedTrack}
+                      onRemove={handleTrackRemove}
+                    />
+
+                    {/* Request Form - Blurred until track selected */}
+                    <div className={`transition-all duration-500 ${selectedTrack ? 'opacity-100' : 'pointer-events-none opacity-40 blur-[2px]'}`}>
+                      <RequestForm />
+                    </div>
                   </div>
                 </div>
               </motion.div>

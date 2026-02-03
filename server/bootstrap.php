@@ -87,7 +87,9 @@ function withFileLock(string $path, callable $callback): mixed
 
 function rateLimit(string $key, int $maxRequests, int $windowSeconds): void
 {
-    $path = __DIR__ . '/storage/ratelimit_' . $key . '.json';
+    // Sanitize key for valid filename (replace non-alphanumeric with underscore)
+    $safeKey = preg_replace('/[^a-zA-Z0-9_-]/', '_', $key);
+    $path = __DIR__ . '/storage/ratelimit_' . $safeKey . '.json';
 
     $state = withFileLock($path, function ($handle) {
         if ($handle === null) {

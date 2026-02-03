@@ -2,7 +2,7 @@ import TextInput from '../ui/TextInput.jsx'
 
 export default function DeezerSearchInput({ value, onChange, isLoading, disabled }) {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 p-10">
       <div className="flex items-center justify-between">
         <h2 className="text-h3 font-semibold">Search Deezer</h2>
         <span className="text-label text-secondary">Live search</span>
