@@ -45,7 +45,7 @@ const PLACEHOLDER_MIXES = [
 
 export default function SuggestedMixesSection() {
   return (
-    <section className="relative overflow-hidden pb-10">
+    <section className="relative overflow-hidden pb-10 pt-12">
       <Container className="max-w-[750px]">
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">

@@ -5,6 +5,7 @@ import DeezerSearchInput from '../shared/DeezerSearchInput.jsx'
 import TrackResultsList from '../shared/TrackResultsList.jsx'
 import SelectedTrackCard from '../shared/SelectedTrackCard.jsx'
 import RequestForm from '../shared/RequestForm.jsx'
+import SuggestedMixesSection from './SuggestedMixesSection.jsx'
 import logo from '../../assets/xty-logo.png'
 import { useDeezerSearch } from '../../hooks/useDeezerSearch.js'
 import { createRequest } from '../../lib/api/requests.js'
@@ -71,14 +72,14 @@ export default function RequestFlowSection() {
             setMessage('')
             setSelectedTrack(null)
         } catch {
-            setSubmitError('GreÅ¡ka pri slanju.')
+            setSubmitError('Greška pri slanju.')
         } finally {
             setIsSubmitting(false)
         }
     }
 
     return (
-        <section className={`relative z-10 min-h-[70vh] pb-10 ${isUnlocked ? 'pt-4 md:pt-10' : 'pt-10 md:pt-16'}`}>
+        <section className={`relative z-10 min-h-[70vh] ${isUnlocked ? 'pt-4 md:pt-10' : 'pt-10 md:pt-16'}`}>
             <Container className="max-w-3xl">
                 <div className="flex flex-col items-center gap-6 text-center">
 
@@ -223,9 +224,12 @@ export default function RequestFlowSection() {
                         )}
                     </AnimatePresence>
                 </div>
+                {isUnlocked ? <SuggestedMixesSection /> : null}
             </Container>
         </section>
     )
 }
+
+
 
 

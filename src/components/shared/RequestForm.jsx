@@ -14,7 +14,7 @@ export default function RequestForm({
   return (
     <form className="flex flex-col gap-4" onSubmit={onSubmit}>
       <div className="flex items-center justify-between">
-        <h3 className="text-md font-semibold uppercase">PoÅ¡alji zahtev</h3>
+        <h3 className="text-md font-semibold uppercase">Pošalji zahtev</h3>
       </div>
       <div className="flex flex-col gap-2">
         <TextInput
@@ -37,7 +37,7 @@ export default function RequestForm({
       </div>
       {error ? <p className="text-body text-secondary">{error}</p> : null}
       <Button type="submit" className={disabled ? 'pointer-events-none opacity-60' : ''}>
-        PoÅ¡alji zahtev
+        Pošalji zahtev
       </Button>
     </form>
   )
