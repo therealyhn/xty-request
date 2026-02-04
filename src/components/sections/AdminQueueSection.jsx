@@ -180,6 +180,14 @@ export default function AdminQueueSection() {
     })
   }
 
+  const showActionsFor = (id) => {
+    setHiddenActions((prev) => {
+      const next = new Set(prev)
+      next.delete(id)
+      return next
+    })
+  }
+
   return (
     <section className="relative z-10 pb-20 pt-12 md:pt-16">
       <Container className="max-w-4xl">
@@ -355,7 +363,14 @@ export default function AdminQueueSection() {
                               but admin might want to change status regardless. Keeping all. */}
 
                           <div className="flex items-center gap-2 rounded-lg bg-black/20 p-1">
-                            {!hiddenActions.has(item.id) ? (
+                            {hiddenActions.has(item.id) ? (
+                              <ActionButton
+                                onClick={() => showActionsFor(item.id)}
+                                colorClass="text-secondary hover:bg-white/5 hover:border-white/10"
+                                icon={<Icons.Refresh />}
+                                label="Edit"
+                              />
+                            ) : (
                               <>
                                 <ActionButton
                                   onClick={() => {
@@ -387,7 +402,7 @@ export default function AdminQueueSection() {
                                   label="Odbij"
                                 />
                               </>
-                            ) : null}
+                            )}
                           </div>
                         </div>
                       </div>
