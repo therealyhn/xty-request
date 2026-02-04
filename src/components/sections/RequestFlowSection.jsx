@@ -8,6 +8,7 @@ import RequestHeader from './request/RequestHeader.jsx'
 import RequestLockedPanel from './request/RequestLockedPanel.jsx'
 import RequestSearchPanel from './request/RequestSearchPanel.jsx'
 import RequestDetailsPanel from './request/RequestDetailsPanel.jsx'
+import RequestSuccessModal from './request/RequestSuccessModal.jsx'
 
 export default function RequestFlowSection() {
     const [isUnlocked, setIsUnlocked] = useState(false)
@@ -18,6 +19,7 @@ export default function RequestFlowSection() {
     const [nickname, setNickname] = useState('')
     const [message, setMessage] = useState('')
     const [submitError, setSubmitError] = useState('')
+    const [submitSuccess, setSubmitSuccess] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const { results, isLoading, error } = useDeezerSearch(searchQuery, {
         debounceMs: 500,
@@ -49,6 +51,7 @@ export default function RequestFlowSection() {
     const handleSubmit = async (event) => {
         event.preventDefault()
         setSubmitError('')
+        setSubmitSuccess(false)
 
         const trimmedNickname = nickname.trim()
         if (!selectedTrack) {
@@ -70,6 +73,7 @@ export default function RequestFlowSection() {
             setNickname('')
             setMessage('')
             setSelectedTrack(null)
+            setSubmitSuccess(true)
         } catch {
             setSubmitError('Greška pri slanju.')
         } finally {
@@ -116,6 +120,7 @@ export default function RequestFlowSection() {
                                         onSubmit={handleSubmit}
                                         isSubmitting={isSubmitting}
                                         submitError={submitError}
+                                        submitSuccess={submitSuccess}
                                     />
                                 </div>
                             </motion.div>
@@ -124,6 +129,10 @@ export default function RequestFlowSection() {
                 </div>
                 {isUnlocked ? <SuggestedMixesSection /> : null}
             </Container>
+            <RequestSuccessModal
+              isOpen={submitSuccess}
+              onClose={() => setSubmitSuccess(false)}
+            />
         </section>
     )
 }

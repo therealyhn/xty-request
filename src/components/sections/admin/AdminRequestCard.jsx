@@ -83,7 +83,7 @@ export default function AdminRequestCard({
                   onClick={onPlay}
                   colorClass="text-green-400 hover:bg-green-500/10 hover:border-green-500/20"
                   icon={<AdminIconPlay />}
-                  label="Pusti"
+                  label="Puštena"
                 />
                 <div className="h-4 w-px bg-white/10" />
                 <AdminActionButton
