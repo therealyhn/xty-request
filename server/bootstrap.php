@@ -38,7 +38,8 @@ function loadEnv(string $path): array
     return $env;
 }
 
-$ENV = loadEnv(__DIR__ . '/.env');
+$localEnv = loadEnv(__DIR__ . '/.env.local');
+$ENV = $localEnv ?: loadEnv(__DIR__ . '/.env');
 
 function env(string $key, ?string $default = null): ?string
 {
