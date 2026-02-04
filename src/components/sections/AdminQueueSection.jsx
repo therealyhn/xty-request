@@ -15,7 +15,7 @@ export default function AdminQueueSection() {
   const [passwordInput, setPasswordInput] = useState('')
   const [credentials, setCredentials] = useState({ username: '', password: '' })
   const [isUnlocked, setIsUnlocked] = useState(false)
-  const [hiddenActions, setHiddenActions] = useState(() => new Set())
+  const [forceShowActions, setForceShowActions] = useState(() => new Set())
 
   const { items, isLoading, error, lastSuccess, reload, updateStatus } = useAdminQueue({
     username: credentials.username,
@@ -36,16 +36,16 @@ export default function AdminQueueSection() {
     }
   }, [lastSuccess])
 
-  const hideActionsFor = (id) => {
-    setHiddenActions((prev) => {
+  const showActionsFor = (id) => {
+    setForceShowActions((prev) => {
       const next = new Set(prev)
       next.add(id)
       return next
     })
   }
 
-  const showActionsFor = (id) => {
-    setHiddenActions((prev) => {
+  const resetActionsFor = (id) => {
+    setForceShowActions((prev) => {
       const next = new Set(prev)
       next.delete(id)
       return next
@@ -91,19 +91,19 @@ export default function AdminQueueSection() {
                     <AdminRequestCard
                       key={item.id}
                       item={item}
-                      isActionsHidden={hiddenActions.has(item.id)}
+                      isActionsHidden={item.status !== 'new' && !forceShowActions.has(item.id)}
                       onEdit={() => showActionsFor(item.id)}
                       onAccept={() => {
-                        hideActionsFor(item.id)
                         updateStatus(item.id, 'accepted')
+                        resetActionsFor(item.id)
                       }}
                       onPlay={() => {
-                        hideActionsFor(item.id)
                         updateStatus(item.id, 'played')
+                        resetActionsFor(item.id)
                       }}
                       onDecline={() => {
-                        hideActionsFor(item.id)
                         updateStatus(item.id, 'declined')
+                        resetActionsFor(item.id)
                       }}
                     />
                   ))}

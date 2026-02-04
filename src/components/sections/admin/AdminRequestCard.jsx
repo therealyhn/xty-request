@@ -22,7 +22,7 @@ export default function AdminRequestCard({
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.2 }}
-      className="group relative overflow-hidden rounded-xl border border-white/5 bg-[#111111] p-0 transition-colors hover:border-white/10"
+      className="group relative overflow-hidden rounded-sm border border-white/5 bg-[#111111] p-0 transition-colors hover:border-white/10"
     >
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
@@ -62,7 +62,7 @@ export default function AdminRequestCard({
         </div>
 
         <div className="flex shrink-0 flex-row gap-2 pt-2 sm:flex-col sm:items-end sm:pt-0">
-          <div className="flex items-center gap-2 rounded-lg bg-black/20 p-1">
+          <div className="flex items-center gap-2 rounded-sm bg-black/20 p-1">
             {isActionsHidden ? (
               <AdminActionButton
                 onClick={onEdit}
