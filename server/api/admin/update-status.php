@@ -37,11 +37,11 @@ if ($id <= 0) {
     ], 400);
 }
 
-$allowed = ['new', 'played', 'declined'];
+$allowed = ['new', 'accepted', 'played', 'declined'];
 if (!in_array($status, $allowed, true)) {
     jsonResponse([
         'error' => 'invalid_status',
-        'message' => 'Status must be new, played, or declined.',
+        'message' => 'Status must be new, accepted, played, or declined.',
     ], 400);
 }
 

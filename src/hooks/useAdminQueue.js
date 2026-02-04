@@ -5,6 +5,7 @@ export function useAdminQueue({ username, password, status }) {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [lastSuccess, setLastSuccess] = useState(false);
 
   const canFetch = Boolean(username && password);
 
@@ -12,9 +13,15 @@ export function useAdminQueue({ username, password, status }) {
     if (!canFetch) return;
     setIsLoading(true);
     setError(null);
+    setLastSuccess(false);
     try {
-      const data = await fetchRequests({ username, password, status });
+      const data = await fetchRequests({
+        username,
+        password,
+        status: status && status !== 'all' ? status : '',
+      });
       setItems(data);
+      setLastSuccess(true);
     } catch (err) {
       setError(err);
       setItems([]);
@@ -36,5 +43,5 @@ export function useAdminQueue({ username, password, status }) {
     [username, password, canFetch, load]
   );
 
-  return { items, isLoading, error, reload: load, updateStatus };
+  return { items, isLoading, error, lastSuccess, reload: load, updateStatus };
 }

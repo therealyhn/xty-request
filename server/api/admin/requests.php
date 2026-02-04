@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 requireAdminAuth();
 
 $status = isset($_GET['status']) ? trim((string) $_GET['status']) : '';
-$allowed = ['new', 'played', 'declined'];
+$allowed = ['new', 'accepted', 'played', 'declined'];
 
 $sql = 'SELECT id, track_id, track_title, track_artist, track_album, track_cover, track_preview, track_link, nickname, message, status, created_at
         FROM requests';
