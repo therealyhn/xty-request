@@ -46,6 +46,10 @@ export default {
           '0%, 100%': { height: '20%' },
           '50%': { height: '100%' },
         },
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
         scan: {
           '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(100%)' },
@@ -57,6 +61,7 @@ export default {
       },
       animation: {
         equalizer: 'equalizer 1.2s ease-in-out infinite',
+        marquee: 'marquee 28s linear infinite',
         scan: 'scan 1.8s linear infinite',
         fadeUp: 'fadeUp 0.6s ease-out both',
       },
