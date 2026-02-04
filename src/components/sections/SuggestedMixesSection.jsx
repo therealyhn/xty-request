@@ -76,6 +76,8 @@ export default function SuggestedMixesSection() {
                 <SwiperSlide key={`${mix.title}-${index}`}>
                   <a
                     href={mix.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="group relative flex flex-col overflow-hidden rounded-surface border border-border-light bg-surface/60 transition hover:border-border-strong"
                   >
                     <div className="relative aspect-square w-full overflow-hidden">

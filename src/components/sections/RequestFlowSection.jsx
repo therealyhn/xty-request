@@ -7,17 +7,22 @@ import SelectedTrackCard from '../shared/SelectedTrackCard.jsx'
 import RequestForm from '../shared/RequestForm.jsx'
 import logo from '../../assets/xty-logo.png'
 import { useDeezerSearch } from '../../hooks/useDeezerSearch.js'
+import { createRequest } from '../../lib/api/requests.js'
 
 export default function RequestFlowSection() {
     const [isUnlocked, setIsUnlocked] = useState(false)
 
     // Search State
-    const [searchQuery, setSearchQuery] = useState('')
-    const [selectedTrack, setSelectedTrack] = useState(null)
-    const { results, isLoading, error } = useDeezerSearch(searchQuery, {
-        debounceMs: 500,
-        limit: 10,
-    })
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedTrack, setSelectedTrack] = useState(null)
+  const [nickname, setNickname] = useState('')
+  const [message, setMessage] = useState('')
+  const [submitError, setSubmitError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { results, isLoading, error } = useDeezerSearch(searchQuery, {
+    debounceMs: 500,
+    limit: 10,
+  })
 
     useEffect(() => {
         const unlocked = localStorage.getItem('xty_request_unlocked')
@@ -37,9 +42,40 @@ export default function RequestFlowSection() {
         setSearchQuery('') // Optional: clear query
     }
 
-    const handleTrackRemove = () => {
-        setSelectedTrack(null)
+  const handleTrackRemove = () => {
+    setSelectedTrack(null)
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    setSubmitError('')
+
+    const trimmedNickname = nickname.trim()
+    if (!selectedTrack) {
+      setSubmitError('Izaberi pesmu.')
+      return
     }
+    if (trimmedNickname.length < 2) {
+      setSubmitError('Unesi ime.')
+      return
+    }
+
+    setIsSubmitting(true)
+    try {
+      await createRequest({
+        nickname: trimmedNickname,
+        message: message.trim(),
+        track: selectedTrack,
+      })
+      setNickname('')
+      setMessage('')
+      setSelectedTrack(null)
+    } catch {
+      setSubmitError('GreÅ¡ka pri slanju.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
     return (
         <section className="relative z-10 min-h-[70vh] pt-4 pb-10 md:pt-10">
@@ -169,9 +205,18 @@ export default function RequestFlowSection() {
                                         />
 
                                         {/* Request Form - Blurred until track selected */}
-                                        <div className={`transition-all duration-500 ${selectedTrack ? 'opacity-100' : 'pointer-events-none opacity-40 blur-[2px]'}`}>
-                                            <RequestForm />
-                                        </div>
+                    <div className={`transition-all duration-500 ${selectedTrack ? 'opacity-100' : 'pointer-events-none opacity-40 blur-[2px]'}`}>
+                      <RequestForm
+                        nickname={nickname}
+                        message={message}
+                        onNicknameChange={setNickname}
+                        onMessageChange={setMessage}
+                        onSubmit={handleSubmit}
+                        disabled={!selectedTrack || isSubmitting}
+                        isSubmitting={isSubmitting}
+                        error={submitError}
+                      />
+                    </div>
                                     </div>
                                 </div>
                             </motion.div>

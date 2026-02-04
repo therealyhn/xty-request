@@ -1,8 +1,6 @@
-const DEFAULT_LIMIT = 10;
+import { buildApiUrl } from './base.js';
 
-function getApiBaseUrl() {
-  return import.meta.env.VITE_API_BASE_URL || '';
-}
+const DEFAULT_LIMIT = 10;
 
 export async function searchDeezer(query, options = {}) {
   const trimmed = query.trim();
@@ -16,8 +14,7 @@ export async function searchDeezer(query, options = {}) {
     limit: String(limit),
   });
 
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/server/api/deezer/search.php?${params.toString()}`;
+  const url = buildApiUrl(`/server/api/deezer/search.php?${params.toString()}`);
 
   const response = await fetch(url, {
     method: 'GET',
