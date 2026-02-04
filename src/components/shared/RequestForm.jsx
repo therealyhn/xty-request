@@ -12,7 +12,7 @@ export default function RequestForm() {
         <div className="flex flex-col gap-2">
           <textarea
             id="message"
-            className="min-h-32 w-full text-center rounded-sm border border-border-base bg-background/60 px-4 py-3 text-body text-primary outline-none transition hover:border-border-strong hover:bg-background/70 focus-visible:ring-2 focus-visible:ring-primary/40"
+            className="min-h-32 w-full text-center rounded-sm border border-border-base bg-background/60 px-4 py-3 text-sm text-primary outline-none transition hover:border-border-strong hover:bg-background/70 focus-visible:ring-2 focus-visible:ring-primary/40"
             placeholder="Poruka (Opciono)..."
           />
         </div>

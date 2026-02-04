@@ -1,4 +1,9 @@
-import Container from '../ui/Container.jsx'
+﻿import Container from '../ui/Container.jsx'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Autoplay, Pagination } from 'swiper/modules'
+
+import 'swiper/css'
+import 'swiper/css/pagination'
 
 const PLACEHOLDER_MIXES = [
   {
@@ -46,49 +51,75 @@ const PLACEHOLDER_MIXES = [
 ]
 
 export default function SuggestedMixesSection() {
-  const items = [...PLACEHOLDER_MIXES, ...PLACEHOLDER_MIXES]
-
   return (
     <section className="relative overflow-hidden pb-10">
-      <Container className="max-w-5xl">
+      <Container className="max-w-2xl">
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-h3 font-semibold text-primary">Suggested Mixes</h2>
-            <span className="text-label text-secondary">Autoplay</span>
+            <h2 className="text-h3 font-semibold text-primary">Naši radovi</h2>
+            <span className="text-label text-secondary">Poslušajte</span>
           </div>
-          <div className="relative">
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-background to-transparent" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent" />
-            <div className="flex w-full overflow-hidden">
-              <div className="flex min-w-full animate-marquee gap-4 pr-4">
-                {items.map((mix, index) => (
+          <div className="rounded-surface border border-border-light bg-surface/40 p-3">
+            <Swiper
+              modules={[Autoplay, Pagination]}
+              spaceBetween={16}
+              slidesPerView={1.1}
+              loop={PLACEHOLDER_MIXES.length > 1}
+              grabCursor
+              speed={500}
+              autoplay={{ delay: 1500, disableOnInteraction: false }}
+              pagination={{
+                clickable: true,
+                el: '.custom-swiper-pagination',
+                renderBullet: (index, className) =>
+                  `<span class="${className} !w-6 !h-1 !rounded-sm transition-all duration-300"></span>`,
+              }}
+              className="w-full"
+            >
+              {PLACEHOLDER_MIXES.map((mix, index) => (
+                <SwiperSlide key={`${mix.title}-${index}`}>
                   <a
-                    key={`${mix.title}-${index}`}
                     href={mix.link}
-                    className="group relative flex w-48 flex-none flex-col overflow-hidden rounded-surface border border-border-light bg-surface/60 transition hover:border-border-strong"
+                    className="group relative flex flex-col overflow-hidden rounded-surface border border-border-light bg-surface/60 transition hover:border-border-strong"
                   >
-                    <div className="relative h-28 w-full overflow-hidden">
+                    <div className="relative h-36 w-full overflow-hidden">
                       <img
                         src={mix.image}
                         alt={mix.title}
                         className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                         loading="lazy"
                         decoding="async"
-                        width={384}
-                        height={224}
+                        width={640}
+                        height={360}
                       />
                     </div>
-                    <div className="flex flex-col gap-1 p-3">
+                    <div className="flex flex-col gap-1 p-4">
                       <span className="text-body font-medium text-primary">{mix.title}</span>
                       <span className="text-label text-secondary">{mix.tag}</span>
                     </div>
                   </a>
-                ))}
-              </div>
-            </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            <div className="custom-swiper-pagination mt-4 flex gap-2" />
           </div>
         </div>
       </Container>
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            .custom-swiper-pagination .swiper-pagination-bullet {
+              background: rgba(255, 255, 255, 0.2) !important;
+              opacity: 1 !important;
+              margin: 0 !important;
+            }
+            .custom-swiper-pagination .swiper-pagination-bullet-active {
+              background: rgba(255, 255, 255, 0.8) !important;
+              width: 2.5rem !important;
+            }
+          `,
+        }}
+      />
     </section>
   )
 }

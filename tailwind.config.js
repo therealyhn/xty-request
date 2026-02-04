@@ -61,7 +61,7 @@ export default {
       },
       animation: {
         equalizer: 'equalizer 1.2s ease-in-out infinite',
-        marquee: 'marquee 28s linear infinite',
+        marquee: 'marquee 4s linear infinite',
         scan: 'scan 1.8s linear infinite',
         fadeUp: 'fadeUp 0.6s ease-out both',
       },
