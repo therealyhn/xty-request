@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Container from '../ui/Container.jsx'
 import DeezerSearchInput from '../shared/DeezerSearchInput.jsx'
@@ -42,7 +42,7 @@ export default function RequestFlowSection() {
     }
 
     return (
-        <section className="relative z-10 min-h-screen pt-4 md:pt-10">
+        <section className="relative z-10 min-h-[70vh] pt-4 pb-10 md:pt-10">
             <Container className="max-w-3xl">
                 <div className="flex flex-col items-center gap-6 text-center">
 
@@ -90,7 +90,7 @@ export default function RequestFlowSection() {
                                         <div>
                                             <h3 className="mb-2 text-2xl font-bold text-primary">ZAPRATI NAS</h3>
                                             <p className="text-body text-secondary">
-                                                Da bi mogao/la da naručiš pesmu, potrebno je da zapratiš našu stranicu.
+                                                Da bi mogao/la da naruÄiÅ¡ pesmu, potrebno je da zapratiÅ¡ naÅ¡u stranicu.
                                             </p>
                                         </div>
 
@@ -119,7 +119,7 @@ export default function RequestFlowSection() {
                                         </button>
 
                                         <p className="text-[11px] uppercase tracking-widest text-secondary/50">
-                                            Klikni da otključaš pretragu
+                                            Klikni da otkljuÄaÅ¡ pretragu
                                         </p>
                                     </div>
                                 </div>
@@ -183,3 +183,4 @@ export default function RequestFlowSection() {
         </section>
     )
 }
+

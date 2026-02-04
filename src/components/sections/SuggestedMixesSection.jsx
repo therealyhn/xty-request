@@ -1,59 +1,52 @@
 ﻿import Container from '../ui/Container.jsx'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Pagination } from 'swiper/modules'
+import teodora from '../../assets/teodora.png'
+import mix from '../../assets/mix.png'
+import tec from '../../assets/tec.png'
+import turira from '../../assets/turira.png'
+import varnice from '../../assets/varnice.png'
 
 import 'swiper/css'
 import 'swiper/css/pagination'
 
 const PLACEHOLDER_MIXES = [
   {
-    title: 'XTY Mashup 01',
-    tag: 'Club Edit',
-    link: '#',
-    image:
-      'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=800&auto=format&fit=crop',
+    title: 'XTY Balkan Mix',
+    tag: 'Only XTY Mashups',
+    link: 'https://www.youtube.com/watch?v=owGr-LL3UlQ&t=1773s',
+    image: mix,
   },
   {
-    title: 'XTY Mashup 02',
-    tag: 'Peak Hour',
-    link: '#',
-    image:
-      'https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=800&auto=format&fit=crop',
+    title: 'Teodora - Bad',
+    tag: 'XTY Mashup',
+    link: 'https://xty-music.com/#mashups',
+    image: teodora,
   },
   {
-    title: 'XTY Mashup 03',
-    tag: 'Live Set',
-    link: '#',
-    image:
-      'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=800&auto=format&fit=crop',
+    title: 'Jala & Buba - Tec-9',
+    tag: 'XTY Mashup',
+    link: 'https://xty-music.com/#mashups',
+    image: tec,
   },
   {
-    title: 'XTY Mashup 04',
-    tag: 'Afterhours',
-    link: '#',
-    image:
-      'https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?q=80&w=800&auto=format&fit=crop',
+    title: 'Relja X Rasta - Turira',
+    tag: 'XTY Mashup',
+    link: 'https://xty-music.com/#mashups',
+    image: turira,
   },
   {
-    title: 'XTY Mashup 05',
-    tag: 'Festival',
-    link: '#',
-    image:
-      'https://images.unsplash.com/photo-1477233534935-f5e6fe7c1159?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    title: 'XTY Mashup 06',
-    tag: 'Underground',
-    link: '#',
-    image:
-      'https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=800&auto=format&fit=crop',
+    title: 'Voyage - Varnice',
+    tag: 'XTY Mashup',
+    link: 'https://xty-music.com/#mashups',
+    image: varnice,
   },
 ]
 
 export default function SuggestedMixesSection() {
   return (
     <section className="relative overflow-hidden pb-10">
-      <Container className="max-w-2xl">
+      <Container className="max-w-[750px]">
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <h2 className="text-h3 font-semibold text-primary">Naši radovi</h2>
@@ -64,6 +57,9 @@ export default function SuggestedMixesSection() {
               modules={[Autoplay, Pagination]}
               spaceBetween={16}
               slidesPerView={1.1}
+              breakpoints={{
+                1024: { slidesPerView: 3 },
+              }}
               loop={PLACEHOLDER_MIXES.length > 1}
               grabCursor
               speed={500}
@@ -82,7 +78,7 @@ export default function SuggestedMixesSection() {
                     href={mix.link}
                     className="group relative flex flex-col overflow-hidden rounded-surface border border-border-light bg-surface/60 transition hover:border-border-strong"
                   >
-                    <div className="relative h-36 w-full overflow-hidden">
+                    <div className="relative aspect-square w-full overflow-hidden">
                       <img
                         src={mix.image}
                         alt={mix.title}
