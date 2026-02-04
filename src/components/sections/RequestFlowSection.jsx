@@ -13,16 +13,16 @@ export default function RequestFlowSection() {
     const [isUnlocked, setIsUnlocked] = useState(false)
 
     // Search State
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedTrack, setSelectedTrack] = useState(null)
-  const [nickname, setNickname] = useState('')
-  const [message, setMessage] = useState('')
-  const [submitError, setSubmitError] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const { results, isLoading, error } = useDeezerSearch(searchQuery, {
-    debounceMs: 500,
-    limit: 10,
-  })
+    const [searchQuery, setSearchQuery] = useState('')
+    const [selectedTrack, setSelectedTrack] = useState(null)
+    const [nickname, setNickname] = useState('')
+    const [message, setMessage] = useState('')
+    const [submitError, setSubmitError] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const { results, isLoading, error } = useDeezerSearch(searchQuery, {
+        debounceMs: 500,
+        limit: 10,
+    })
 
     useEffect(() => {
         const unlocked = localStorage.getItem('xty_request_unlocked')
@@ -42,43 +42,43 @@ export default function RequestFlowSection() {
         setSearchQuery('') // Optional: clear query
     }
 
-  const handleTrackRemove = () => {
-    setSelectedTrack(null)
-  }
-
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    setSubmitError('')
-
-    const trimmedNickname = nickname.trim()
-    if (!selectedTrack) {
-      setSubmitError('Izaberi pesmu.')
-      return
-    }
-    if (trimmedNickname.length < 2) {
-      setSubmitError('Unesi ime.')
-      return
+    const handleTrackRemove = () => {
+        setSelectedTrack(null)
     }
 
-    setIsSubmitting(true)
-    try {
-      await createRequest({
-        nickname: trimmedNickname,
-        message: message.trim(),
-        track: selectedTrack,
-      })
-      setNickname('')
-      setMessage('')
-      setSelectedTrack(null)
-    } catch {
-      setSubmitError('GreÅ¡ka pri slanju.')
-    } finally {
-      setIsSubmitting(false)
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+        setSubmitError('')
+
+        const trimmedNickname = nickname.trim()
+        if (!selectedTrack) {
+            setSubmitError('Izaberi pesmu.')
+            return
+        }
+        if (trimmedNickname.length < 2) {
+            setSubmitError('Unesi ime.')
+            return
+        }
+
+        setIsSubmitting(true)
+        try {
+            await createRequest({
+                nickname: trimmedNickname,
+                message: message.trim(),
+                track: selectedTrack,
+            })
+            setNickname('')
+            setMessage('')
+            setSelectedTrack(null)
+        } catch {
+            setSubmitError('GreÅ¡ka pri slanju.')
+        } finally {
+            setIsSubmitting(false)
+        }
     }
-  }
 
     return (
-        <section className="relative z-10 min-h-[70vh] pt-4 pb-10 md:pt-10">
+        <section className={`relative z-10 min-h-[70vh] pb-10 ${isUnlocked ? 'pt-4 md:pt-10' : 'pt-10 md:pt-16'}`}>
             <Container className="max-w-3xl">
                 <div className="flex flex-col items-center gap-6 text-center">
 
@@ -97,13 +97,13 @@ export default function RequestFlowSection() {
                             <img
                                 src={logo}
                                 alt="XTY logo"
-                                className="relative h-16 w-auto drop-shadow-glow md:h-32"
+                                className={`relative w-auto drop-shadow-glow ${isUnlocked ? 'h-16 sm:h-20 md:h-28' : 'h-24 sm:h-28 md:h-36'}`}
                                 width={200}
                                 height={100}
                             />
                         </div>
 
-                        <h1 className="bg-text-glow bg-clip-text text-center font-heading text-3xl font-bold tracking-tighter text-transparent md:text-8xl">
+                        <h1 className={`bg-text-glow bg-clip-text text-center font-heading font-bold tracking-tighter text-transparent ${isUnlocked ? 'text-3xl sm:text-5xl md:text-7xl' : 'text-5xl sm:text-7xl md:text-8xl'}`}>
                             NARUČI PESMU
                         </h1>
                     </div>
@@ -116,7 +116,7 @@ export default function RequestFlowSection() {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}
                                 transition={{ duration: 0.5 }}
-                                className="flex w-full max-w-md flex-col gap-6"
+                                className="flex w-full max-w-md mt-[6rem] flex-col gap-6"
                             >
                                 <div className="relative overflow-hidden rounded-sm border border-border-base bg-surface p-8 text-center shadow-2xl">
                                     {/* Decorative gradients */}
@@ -126,7 +126,7 @@ export default function RequestFlowSection() {
                                         <div>
                                             <h3 className="mb-2 text-2xl font-bold text-primary">ZAPRATI NAS</h3>
                                             <p className="text-body text-secondary">
-                                                Da bi mogao/la da naruÄiÅ¡ pesmu, potrebno je da zapratiÅ¡ naÅ¡u stranicu.
+                                                Da bi naručili pesmu, potrebno je samo jedan mali follow na našem Instagramu.
                                             </p>
                                         </div>
 
@@ -155,7 +155,7 @@ export default function RequestFlowSection() {
                                         </button>
 
                                         <p className="text-[11px] uppercase tracking-widest text-secondary/50">
-                                            Klikni da otkljuÄaÅ¡ pretragu
+                                            Kada nas zapratis, otvorit će se pretraga.
                                         </p>
                                     </div>
                                 </div>
@@ -205,27 +205,27 @@ export default function RequestFlowSection() {
                                         />
 
                                         {/* Request Form - Blurred until track selected */}
-                    <div className={`transition-all duration-500 ${selectedTrack ? 'opacity-100' : 'pointer-events-none opacity-40 blur-[2px]'}`}>
-                      <RequestForm
-                        nickname={nickname}
-                        message={message}
-                        onNicknameChange={setNickname}
-                        onMessageChange={setMessage}
-                        onSubmit={handleSubmit}
-                        disabled={!selectedTrack || isSubmitting}
-                        isSubmitting={isSubmitting}
-                        error={submitError}
-                      />
-                    </div>
+                                        <div className={`transition-all duration-500 ${selectedTrack ? 'opacity-100' : 'pointer-events-none opacity-40 blur-[2px]'}`}>
+                                            <RequestForm
+                                                nickname={nickname}
+                                                message={message}
+                                                onNicknameChange={setNickname}
+                                                onMessageChange={setMessage}
+                                                onSubmit={handleSubmit}
+                                                disabled={!selectedTrack || isSubmitting}
+                                                isSubmitting={isSubmitting}
+                                                error={submitError}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </motion.div>
                         )}
                     </AnimatePresence>
-
                 </div>
             </Container>
         </section>
     )
 }
+
 
