@@ -42,7 +42,7 @@ export default function RequestFlowSection() {
     }
 
     return (
-        <section className="relative z-10 min-h-screen pb-24 pt-4 md:pt-24">
+        <section className="relative z-10 min-h-screen pb-10 pt-4 md:pt-10">
             <Container className="max-w-3xl">
                 <div className="flex flex-col items-center gap-6 text-center">
 
