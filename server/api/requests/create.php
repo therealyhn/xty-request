@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../../lib/Database.php';
+require_once __DIR__ . '/../../lib/Settings.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     jsonResponse(['ok' => true], 200);
@@ -29,9 +30,12 @@ $message = isset($payload['message']) ? trim((string) $payload['message']) : '';
 $nightCode = isset($payload['night_code']) ? trim((string) $payload['night_code']) : '';
 $track = isset($payload['track']) && is_array($payload['track']) ? $payload['track'] : null;
 
-if ($nightCode !== '') {
+$expected = getSetting('night_code');
+if ($expected === null || $expected === '') {
     $expected = env('REQUEST_NIGHT_CODE');
-    if ($expected && $nightCode !== $expected) {
+}
+if ($expected) {
+    if ($nightCode === '' || $nightCode !== $expected) {
         jsonResponse([
             'error' => 'invalid_night_code',
             'message' => 'Night code is invalid.',

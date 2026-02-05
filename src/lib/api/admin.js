@@ -46,3 +46,41 @@ export async function updateRequestStatus({ username, password, id, status }) {
 
   return response.json();
 }
+
+export async function fetchNightCode({ username, password }) {
+  const url = buildApiUrl('/server/api/admin/night-code.php');
+  const response = await fetch(url, {
+    headers: {
+      Authorization: buildAuthHeader(username, password),
+    },
+  });
+
+  if (!response.ok) {
+    const error = new Error('Night code fetch failed.');
+    error.status = response.status;
+    throw error;
+  }
+
+  const payload = await response.json();
+  return payload?.data?.night_code || '';
+}
+
+export async function updateNightCode({ username, password, nightCode }) {
+  const url = buildApiUrl('/server/api/admin/night-code.php');
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: buildAuthHeader(username, password),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ night_code: nightCode }),
+  });
+
+  if (!response.ok) {
+    const error = new Error('Night code update failed.');
+    error.status = response.status;
+    throw error;
+  }
+
+  return response.json();
+}
