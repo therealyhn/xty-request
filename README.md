@@ -92,8 +92,6 @@ XTY Request is a modern, mobile-first song request system designed for live even
 
 ---
 
-## 🚀 **Quick Start**
-
 ### Prerequisites
 - **Node.js** 18+ and npm
 - **PHP** 8+ with MySQL support
