@@ -84,4 +84,5 @@ $stmt->execute([
     ':request_ip' => getClientIp(),
 ]);
 
-jsonResponse(['ok' => true], 201);
+$id = (int) db()->lastInsertId();
+jsonResponse(['ok' => true, 'id' => $id], 201);

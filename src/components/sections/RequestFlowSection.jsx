@@ -9,6 +9,7 @@ import RequestLockedPanel from './request/RequestLockedPanel.jsx'
 import RequestSearchPanel from './request/RequestSearchPanel.jsx'
 import RequestDetailsPanel from './request/RequestDetailsPanel.jsx'
 import RequestSuccessModal from './request/RequestSuccessModal.jsx'
+import { subscribeToPush } from '../../lib/push.js'
 
 export default function RequestFlowSection() {
     const [isUnlocked, setIsUnlocked] = useState(false)
@@ -62,11 +63,14 @@ export default function RequestFlowSection() {
 
         setIsSubmitting(true)
         try {
-            await createRequest({
+            const result = await createRequest({
                 night_code: nightCode.trim(),
                 message: message.trim(),
                 track: selectedTrack,
             })
+            if (result?.id) {
+                subscribeToPush(result.id).catch(() => {})
+            }
             setNightCode('')
             setMessage('')
             setSelectedTrack(null)

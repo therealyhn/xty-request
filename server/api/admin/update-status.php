@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../../lib/Database.php';
 require_once __DIR__ . '/../../lib/AdminAuth.php';
+require_once __DIR__ . '/../../lib/Push.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     jsonResponse(['ok' => true], 200);
@@ -50,5 +51,17 @@ $stmt->execute([
     ':status' => $status,
     ':id' => $id,
 ]);
+
+if (in_array($status, ['accepted', 'declined'], true)) {
+    $trackStmt = db()->prepare('SELECT track_title, track_artist FROM requests WHERE id = :id');
+    $trackStmt->execute([':id' => $id]);
+    $track = $trackStmt->fetch();
+    if (is_array($track)) {
+        sendStatusPush($id, $status, [
+            'title' => $track['track_title'] ?? '',
+            'artist' => $track['track_artist'] ?? '',
+        ]);
+    }
+}
 
 jsonResponse(['ok' => true], 200);
