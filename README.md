@@ -218,21 +218,6 @@ Content-Type: application/json
 
 ---
 
-## 🧪 **Development Commands**
-
-```bash
-# Frontend Development
-npm run dev          # Start Vite dev server
-npm run build        # Build production bundle
-npm run preview      # Preview production build locally
-npm run lint         # Run ESLint
-
-# Backend (requires XAMPP/Apache running)
-# Access via http://localhost/Projects/xty-request/server/
-```
-
----
-
 ## 📝 **Database Schema**
 
 ### `requests` Table
@@ -288,24 +273,6 @@ The XTY Request System embraces a **premium dark club aesthetic** with these des
 - **Minimal Friction:** 3-step request flow (search → select → submit)
 - **Clear Hierarchy:** Visual status indicators and color-coded queue items
 - **Responsive Layout:** Seamless experience from mobile to desktop admin panels
-
----
-
-## 🤝 **Contributing**
-
-When contributing to this project, please maintain:
-
-### ✅ Safe to Commit
-- `src/` — All frontend source code
-- `server/api/`, `server/lib/`, `server/sql/` — Backend logic and schema
-- `public/` — Static assets and service worker
-- Configuration files: `package.json`, `vite.config.js`, `tailwind.config.js`
-
-### ❌ Never Commit
-- `server/.env`, `server/.env.local` — Backend environment configs
-- `.env.local` — Frontend environment configs
-- `node_modules/`, `vendor/` — Dependency directories
-- `dist/` — Build output (regenerated)
 
 ---
 
