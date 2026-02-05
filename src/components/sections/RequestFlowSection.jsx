@@ -20,6 +20,7 @@ export default function RequestFlowSection() {
     const [message, setMessage] = useState('')
     const [submitError, setSubmitError] = useState('')
     const [submitSuccess, setSubmitSuccess] = useState(false)
+    const [submitErrorModal, setSubmitErrorModal] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const { results, isLoading, error } = useDeezerSearch(searchQuery, {
         debounceMs: 500,
@@ -52,6 +53,7 @@ export default function RequestFlowSection() {
         event.preventDefault()
         setSubmitError('')
         setSubmitSuccess(false)
+        setSubmitErrorModal(false)
 
         if (!selectedTrack) {
             setSubmitError('Izaberi pesmu.')
@@ -69,8 +71,12 @@ export default function RequestFlowSection() {
             setMessage('')
             setSelectedTrack(null)
             setSubmitSuccess(true)
-        } catch {
-            setSubmitError('Greška pri slanju.')
+        } catch (err) {
+            const message = err?.message || 'Greška pri slanju.'
+            setSubmitError(message)
+            if (message.toLowerCase().includes('night code')) {
+                setSubmitErrorModal(true)
+            }
         } finally {
             setIsSubmitting(false)
         }
@@ -115,7 +121,6 @@ export default function RequestFlowSection() {
                                         onSubmit={handleSubmit}
                                         isSubmitting={isSubmitting}
                                         submitError={submitError}
-                                        submitSuccess={submitSuccess}
                                     />
                                 </div>
                             </motion.div>
@@ -127,6 +132,13 @@ export default function RequestFlowSection() {
             <RequestSuccessModal
               isOpen={submitSuccess}
               onClose={() => setSubmitSuccess(false)}
+              message="Zahtev je uspešno poslat."
+            />
+            <RequestSuccessModal
+              isOpen={submitErrorModal}
+              onClose={() => setSubmitErrorModal(false)}
+              message="Pogrešan Kod Žurke - Pokušaj ponovo"
+              variant="error"
             />
         </section>
     )
