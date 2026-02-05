@@ -24,15 +24,19 @@ if (!is_array($payload)) {
     ], 400);
 }
 
-$nickname = isset($payload['nickname']) ? trim((string) $payload['nickname']) : '';
+$nickname = '';
 $message = isset($payload['message']) ? trim((string) $payload['message']) : '';
+$nightCode = isset($payload['night_code']) ? trim((string) $payload['night_code']) : '';
 $track = isset($payload['track']) && is_array($payload['track']) ? $payload['track'] : null;
 
-if ($nickname === '' || mb_strlen($nickname) < 2 || mb_strlen($nickname) > 40) {
-    jsonResponse([
-        'error' => 'invalid_nickname',
-        'message' => 'Nickname must be between 2 and 40 characters.',
-    ], 400);
+if ($nightCode !== '') {
+    $expected = env('REQUEST_NIGHT_CODE');
+    if ($expected && $nightCode !== $expected) {
+        jsonResponse([
+            'error' => 'invalid_night_code',
+            'message' => 'Night code is invalid.',
+        ], 401);
+    }
 }
 
 if ($message !== '' && mb_strlen($message) > 200) {

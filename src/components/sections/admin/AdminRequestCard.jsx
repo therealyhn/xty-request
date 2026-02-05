@@ -51,14 +51,16 @@ export default function AdminRequestCard({
             </div>
           )}
 
-          <div className="mt-2 flex items-center gap-2 text-xs text-secondary">
-            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white/5 text-secondary">
-              <AdminIconUser className="h-3 w-3" />
+          {item.nickname ? (
+            <div className="mt-2 flex items-center gap-2 text-xs text-secondary">
+              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white/5 text-secondary">
+                <AdminIconUser className="h-3 w-3" />
+              </div>
+              <span className="font-medium text-white/60">
+                {item.nickname}
+              </span>
             </div>
-            <span className="font-medium text-white/60">
-              {item.nickname}
-            </span>
-          </div>
+          ) : null}
         </div>
 
         <div className="flex shrink-0 flex-row gap-2 pt-2 sm:flex-col sm:items-end sm:pt-0">

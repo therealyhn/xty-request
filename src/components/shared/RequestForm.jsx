@@ -2,9 +2,9 @@
 import TextInput from '../ui/TextInput.jsx'
 
 export default function RequestForm({
-  nickname,
+  nightCode,
   message,
-  onNicknameChange,
+  onNightCodeChange,
   onMessageChange,
   onSubmit,
   disabled,
@@ -18,10 +18,10 @@ export default function RequestForm({
       </div>
       <div className="flex flex-col gap-2">
         <TextInput
-          id="nickname"
-          placeholder="Tvoje ime"
-          value={nickname}
-          onChange={(event) => onNicknameChange(event.target.value)}
+          id="night-code"
+          placeholder="Kod Žurke"
+          value={nightCode}
+          onChange={(event) => onNightCodeChange(event.target.value)}
           disabled={disabled}
         />
         <div className="flex flex-col gap-2">

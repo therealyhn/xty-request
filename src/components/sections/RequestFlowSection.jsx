@@ -16,7 +16,7 @@ export default function RequestFlowSection() {
     // Search State
     const [searchQuery, setSearchQuery] = useState('')
     const [selectedTrack, setSelectedTrack] = useState(null)
-    const [nickname, setNickname] = useState('')
+    const [nightCode, setNightCode] = useState('')
     const [message, setMessage] = useState('')
     const [submitError, setSubmitError] = useState('')
     const [submitSuccess, setSubmitSuccess] = useState(false)
@@ -53,24 +53,19 @@ export default function RequestFlowSection() {
         setSubmitError('')
         setSubmitSuccess(false)
 
-        const trimmedNickname = nickname.trim()
         if (!selectedTrack) {
             setSubmitError('Izaberi pesmu.')
-            return
-        }
-        if (trimmedNickname.length < 2) {
-            setSubmitError('Unesi ime.')
             return
         }
 
         setIsSubmitting(true)
         try {
             await createRequest({
-                nickname: trimmedNickname,
+                night_code: nightCode.trim(),
                 message: message.trim(),
                 track: selectedTrack,
             })
-            setNickname('')
+            setNightCode('')
             setMessage('')
             setSelectedTrack(null)
             setSubmitSuccess(true)
@@ -113,9 +108,9 @@ export default function RequestFlowSection() {
                                     <RequestDetailsPanel
                                         selectedTrack={selectedTrack}
                                         onRemoveTrack={handleTrackRemove}
-                                        nickname={nickname}
+                                        nightCode={nightCode}
                                         message={message}
-                                        onNicknameChange={setNickname}
+                                        onNightCodeChange={setNightCode}
                                         onMessageChange={setMessage}
                                         onSubmit={handleSubmit}
                                         isSubmitting={isSubmitting}
