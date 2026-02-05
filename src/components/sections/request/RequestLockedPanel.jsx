@@ -17,7 +17,7 @@ export default function RequestLockedPanel({ onUnlock }) {
           <div>
             <h3 className="mb-2 text-2xl font-bold text-primary">ZAPRATI NAS</h3>
             <p className="text-body text-secondary">
-              Da bi naručili pesmu, potrebno je samo jedan mali follow na našem Instagramu.
+              Da bi naručili pesmu, potrebno je samo jedan follow na našem Instagramu.
             </p>
           </div>
 
@@ -46,7 +46,7 @@ export default function RequestLockedPanel({ onUnlock }) {
           </button>
 
           <p className="text-[11px] uppercase tracking-widest text-secondary/50">
-            Kada nas zapratis, otvorit će se pretraga.
+            Kada nas zapratiš, otvorit će se pretraga.
           </p>
         </div>
       </div>
