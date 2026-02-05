@@ -1,127 +1,476 @@
-# XTY REQUESTS
+<div align="center">
 
-Interactive song request system for live events by XTY. Mobile-first UI with a premium dark club aesthetic, fast Deezer search, and an admin queue for managing requests in real time.
+# 🎵 XTY REQUEST SYSTEM
 
-## Highlights
-- Mobile-first request flow: search, select, night code, optional message, submit.
-- Admin panel: status management (New, Accepted, Played, Declined), quick actions, filters.
-- Night code system with admin control (stored in DB settings).
-- Secure backend: basic auth for admin APIs, rate limiting for search.
-- Optional web push notifications on Accepted/Declined (via VAPID + service worker).
-- Clear separation of frontend and PHP backend; modular React components.
+### Interactive Live Event Song Request Platform
 
-## Tech Stack
-- Frontend: React + Vite + Tailwind CSS + Framer Motion
-- Backend: PHP 8+ (Hostinger compatible)
-- Data: MySQL
-- Search: Deezer API (proxy endpoint)
-- Web Push: Minishlink WebPush (optional, production only)
+*Premium mobile-first request system with real-time admin queue management*
 
-## Architecture Overview
-- `src/` React app (request and admin pages).
-- `server/` PHP API (requests, admin, search, night-code, push).
-- `server/sql/schema.sql` database schema.
-- `public/sw.js` service worker for push notifications.
+[![React](https://img.shields.io/badge/React-19.2-61DAFB?style=flat&logo=react&logoColor=white)](https://reactjs.org/)
+[![PHP](https://img.shields.io/badge/PHP-8%2B-777BB4?style=flat&logo=php&logoColor=white)](https://www.php.net/)
+[![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?style=flat&logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-## Pages
-- `/` Request page (users submit song requests).
-- `/admin` Admin panel (manage queue and night code).
+[Features](#-features) • [Tech Stack](#-tech-stack) • [Quick Start](#-quick-start) • [Deployment](#-deployment) • [API Documentation](#-api-endpoints)
 
-## Core Features
-### Request Flow
-- Deezer search with debounce.
-- Track selection and preview data.
-- Night code validation (DB settings or env fallback).
-- Success and error modals for feedback.
+</div>
 
-### Admin Flow
-- Basic auth protected endpoints.
-- Filterable queue and status updates.
-- Night code management (view/generate/save).
+---
 
-### Security
-- No secrets committed.
-- `.env` and `.env.local` are gitignored.
-- API validates input and enforces basic auth on admin routes.
+## 📖 **Overview**
 
-## Getting Started (Local)
-### 1) Install frontend deps
+XTY Request is a modern, mobile-first song request system designed for live events and DJ performances. Built with a premium dark club aesthetic, it enables seamless interaction between event attendees and performers through an intuitive request flow backed by a powerful admin queue management system.
+
+**Key Highlights:**
+- 🎯 **Mobile-First UX** — Optimized touch interface for smartphone users at live events
+- 🔍 **Deezer Integration** — Lightning-fast track search with debounced queries
+- 🔐 **Night Code System** — Event-specific validation with admin-controlled codes
+- ⚡ **Real-Time Queue** — Instant status updates (New → Accepted → Played/Declined)
+- 🔔 **Push Notifications** — Optional web push for request status updates
+- 🎨 **Premium Design** — Dark club aesthetic with Framer Motion animations
+
+---
+
+## ✨ **Features**
+
+### 🎤 **User Request Flow**
+- **Smart Search** — Debounced Deezer API integration with instant results
+- **Track Preview** — View album art, artist, and preview links before requesting
+- **Night Code Validation** — Event-specific access control with DB-stored codes
+- **Personalization** — Optional nickname and message for each request
+- **Instant Feedback** — Beautiful success/error modals with animations
+- **Push Subscription** — Opt-in notifications for request status updates
+
+### 🎛️ **Admin Queue Management**
+- **Centralized Dashboard** — Manage all requests from a single interface
+- **Multi-Status Workflow** — New, Accepted, Played, Declined states
+- **Quick Actions** — Bulk operations and one-click status updates
+- **Advanced Filtering** — Sort by status, time, and search criteria
+- **Night Code Control** — Generate and update night codes on the fly
+- **Real-Time Updates** — Live queue refresh with status indicators
+
+### 🔒 **Security & Performance**
+- **Basic Auth Protection** — Secured admin endpoints with HTTP authentication
+- **Rate Limiting** — Configurable request throttling for Deezer API
+- **Input Validation** — Server-side sanitization and validation
+- **IP Tracking** — Request logging for abuse prevention
+- **Environment Isolation** — Separate configs for development/production
+- **No Committed Secrets** — All credentials in gitignored `.env` files
+
+### 🔔 **Web Push Notifications** *(Optional)*
+- **VAPID Integration** — Standards-compliant web push implementation
+- **Service Worker** — Background notification handling
+- **Selective Subscriptions** — Per-request opt-in model
+- **Status Triggers** — Automatic push on Accepted/Declined status changes
+
+---
+
+## 🛠️ **Tech Stack**
+
+### Frontend
+| Technology | Version | Purpose |
+|-----------|---------|---------|
+| **React** | 19.2 | UI framework with hooks and modern patterns |
+| **Vite** | 7.2 | Lightning-fast dev server and build tool |
+| **Tailwind CSS** | 3.4 | Utility-first styling with custom design system |
+| **Framer Motion** | 12.30 | Smooth animations and transitions |
+| **Swiper** | 11.2 | Touch-optimized carousels and sliders |
+
+### Backend
+| Technology | Version | Purpose |
+|-----------|---------|---------|
+| **PHP** | 8+ | Server-side logic (Hostinger compatible) |
+| **MySQL** | 5.7+ | Relational database for requests and settings |
+| **Deezer API** | v1 | Music search and track metadata |
+| **Minishlink WebPush** | Latest | VAPID-based push notification delivery |
+
+### DevOps & Tools
+- **XAMPP/Apache** — Local development server
+- **Composer** — PHP dependency management
+- **npm** — Node package management
+- **Git** — Version control with protected secrets
+
+---
+
+## 🚀 **Quick Start**
+
+### Prerequisites
+- **Node.js** 18+ and npm
+- **PHP** 8+ with MySQL support
+- **XAMPP** or similar Apache/MySQL environment
+- **Composer** for PHP dependencies
+
+### 1️⃣ **Clone Repository**
+```bash
+git clone <repository-url>
+cd xty-request
 ```
+
+### 2️⃣ **Install Dependencies**
+```bash
+# Frontend dependencies
 npm install
+
+# Backend dependencies (if using Composer)
+cd server
+composer install
+cd ..
 ```
 
-### 2) Configure backend env
-Create `server/.env.local`:
-```
+### 3️⃣ **Configure Environment**
+
+Create `server/.env.local` with your local settings:
+```env
 APP_ENV=development
 APP_URL=http://localhost/Projects/xty-request
 
+# Database Configuration
 DB_HOST=127.0.0.1
 DB_NAME=xty_requests_local
 DB_USER=root
 DB_PASS=
 
+# Admin Authentication
 ADMIN_USER=admin
 ADMIN_PASS=admin
 
+# Night Code & Rate Limiting
 REQUEST_NIGHT_CODE=1234
 RATE_LIMIT_WINDOW_SECONDS=60
 RATE_LIMIT_MAX_REQUESTS=15
 
-VAPID_PUBLIC_KEY=your_vapid_public_key
-VAPID_PRIVATE_KEY=your_vapid_private_key
+# Web Push (Optional - Generate at https://vapidkeys.com)
+VAPID_PUBLIC_KEY=your_vapid_public_key_here
+VAPID_PRIVATE_KEY=your_vapid_private_key_here
 ```
 
-### 3) Create DB schema
-Import `server/sql/schema.sql` into your MySQL database.
+> **💡 Tip:** Use `.env.example` as a template reference
 
-### 4) Start frontend
-```
+### 4️⃣ **Setup Database**
+1. Start XAMPP and launch **phpMyAdmin**
+2. Create database: `xty_requests_local`
+3. Import schema:
+   ```sql
+   -- Import server/sql/schema.sql
+   ```
+   Or via command line:
+   ```bash
+   mysql -u root -p xty_requests_local < server/sql/schema.sql
+   ```
+
+### 5️⃣ **Start Development Servers**
+
+**Terminal 1 - Frontend:**
+```bash
 npm run dev
 ```
+Frontend runs at: `http://localhost:5173`
 
-### 5) Start backend
-Use XAMPP/Apache to serve `server/` under:
+**Terminal 2 - Backend:**
+Ensure XAMPP Apache is running. Backend API accessible at:
 ```
 http://localhost/Projects/xty-request/server/
 ```
 
-## Production Notes
-- Upload `dist/` to domain root.
-- Upload `server/` to `public_html/server/`.
-- Set `server/.env` with production credentials (never commit).
-- Ensure DB schema is imported before first run.
-
-## Web Push (Optional)
-Push notifications are sent when a request is Accepted or Declined.
-Requires:
-- Valid VAPID keys in `server/.env`.
-- HTTPS domain (push does not work on insecure origins).
-
-## Important Files
-- `src/components/sections/request/*` request UI
-- `src/components/sections/admin/*` admin UI
-- `src/lib/api/*` API clients
-- `server/api/*` PHP endpoints
-- `server/sql/schema.sql` DB schema
-
-## Repo Hygiene
-### SAFE TO COMMIT
-- `src/`
-- `server/api/`, `server/lib/`, `server/sql/`
-- `public/`
-- `README.md`, `package.json`, `vite.config.*`
-
-### NOT SAFE TO COMMIT
-- `server/.env`
-- `server/.env.local`
-- `.env.local` (frontend)
-- `node_modules/`
-- `vendor/`
+### 6️⃣ **Access the Application**
+- **Request Page:** `http://localhost:5173/`
+- **Admin Panel:** `http://localhost:5173/admin`
+  - Username: `admin` (from `.env.local`)
+  - Password: `admin`
 
 ---
 
-If you are reviewing this project, focus on:
-- UX flow clarity for real event usage.
-- PHP backend simplicity and Hostinger compatibility.
-- End-to-end data flow from request to admin actions.
+## 🌐 **Deployment**
+
+### Production Build
+
+1. **Build Frontend:**
+   ```bash
+   npm run build
+   ```
+   This creates optimized files in `dist/` directory.
+
+2. **Configure Production Environment:**
+   Create `server/.env` (NOT `.env.local`) on your production server:
+   ```env
+   APP_ENV=production
+   APP_URL=https://yourdomain.com
+
+   DB_HOST=localhost
+   DB_NAME=your_production_db
+   DB_USER=your_db_user
+   DB_PASS=your_secure_password
+
+   ADMIN_USER=your_admin_username
+   ADMIN_PASS=your_strong_password
+
+   REQUEST_NIGHT_CODE=auto  # Will be managed via admin panel
+   RATE_LIMIT_WINDOW_SECONDS=60
+   RATE_LIMIT_MAX_REQUESTS=10
+
+   VAPID_PUBLIC_KEY=your_production_vapid_public_key
+   VAPID_PRIVATE_KEY=your_production_vapid_private_key
+   ```
+
+3. **Upload Files:**
+   - Upload `dist/*` contents to your domain root (e.g., `public_html/`)
+   - Upload `server/` directory to `public_html/server/`
+   - Ensure `server/.env` is present and **NOT committed to Git**
+
+4. **Setup Database:**
+   - Import `server/sql/schema.sql` to production database
+   - Verify database connection via `server/api/test.php` (if available)
+
+5. **Configure Server:**
+   - Ensure PHP 8+ and MySQL are enabled
+   - Set proper file permissions (typically 755 for directories, 644 for files)
+   - Configure `.htaccess` if needed for URL rewriting
+
+### Hostinger-Specific Notes
+- Use **File Manager** or **FTP** to upload files
+- Database credentials available in **hPanel → Databases**
+- PHP version can be configured in **hPanel → Advanced → PHP Configuration**
+- HTTPS is required for web push notifications (enable in hPanel)
+
+---
+
+## 📁 **Project Structure**
+
+```
+xty-request/
+├── src/                          # React frontend source
+│   ├── components/              
+│   │   ├── sections/
+│   │   │   ├── request/         # User request flow components
+│   │   │   └── admin/           # Admin queue management components
+│   │   └── ui/                  # Reusable UI components
+│   ├── hooks/                   # Custom React hooks
+│   ├── lib/
+│   │   └── api/                 # API client functions
+│   ├── pages/                   # Main page components
+│   │   ├── RequestPage.jsx     # User-facing request interface
+│   │   └── AdminPage.jsx       # Admin queue dashboard
+│   ├── App.jsx                  # Root application component
+│   └── main.jsx                 # React entry point
+│
+├── server/                       # PHP backend
+│   ├── api/                     # API endpoints
+│   │   ├── requests.php         # Request CRUD operations
+│   │   ├── admin.php            # Admin queue management
+│   │   ├── search.php           # Deezer search proxy
+│   │   ├── night-code.php       # Night code management
+│   │   └── push.php             # Web push notifications
+│   ├── lib/                     # Shared PHP utilities
+│   │   ├── Database.php         # MySQL connection handler
+│   │   ├── Auth.php             # Basic auth validation
+│   │   └── RateLimit.php        # Request rate limiting
+│   ├── sql/
+│   │   └── schema.sql           # Database schema definition
+│   ├── bootstrap.php            # Backend initialization
+│   └── .env.local               # Local environment config (gitignored)
+│
+├── public/                       # Static assets
+│   └── sw.js                    # Service worker for push notifications
+│
+├── dist/                         # Production build (generated)
+├── .env.example                 # Environment template
+├── package.json                 # Frontend dependencies
+├── vite.config.js               # Vite configuration
+├── tailwind.config.js           # Tailwind CSS configuration
+└── README.md                    # This file
+```
+
+---
+
+## 🔌 **API Endpoints**
+
+### Public Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/server/api/search.php` | GET | Search Deezer for tracks (rate-limited) |
+| `/server/api/requests.php` | POST | Submit a new song request |
+| `/server/api/push.php` | POST | Subscribe to push notifications |
+
+### Admin Endpoints (Basic Auth Required)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/server/api/admin.php` | GET | Fetch all requests with filters |
+| `/server/api/admin.php` | PATCH | Update request status |
+| `/server/api/night-code.php` | GET | Get current night code |
+| `/server/api/night-code.php` | POST | Generate/update night code |
+
+### Example Request Flow
+
+**1. Search for a track:**
+```javascript
+GET /server/api/search.php?q=never+gonna+give+you+up
+```
+
+**2. Submit request:**
+```javascript
+POST /server/api/requests.php
+Content-Type: application/json
+
+{
+  "track_id": "123456",
+  "track_title": "Never Gonna Give You Up",
+  "track_artist": "Rick Astley",
+  "track_album": "Whenever You Need Somebody",
+  "track_cover": "https://...jpg",
+  "track_preview": "https://...mp3",
+  "track_link": "https://deezer.com/...",
+  "nickname": "JohnDoe",
+  "message": "Classic!",
+  "night_code": "1234"
+}
+```
+
+**3. Admin updates status:**
+```javascript
+PATCH /server/api/admin.php
+Authorization: Basic YWRtaW46YWRtaW4=
+Content-Type: application/json
+
+{
+  "id": 42,
+  "status": "accepted"
+}
+```
+
+---
+
+## 🔐 **Security Best Practices**
+
+### Environment Configuration
+- ✅ **Never commit** `.env` or `.env.local` files
+- ✅ Use strong admin passwords in production
+- ✅ Rotate night codes regularly via admin panel
+- ✅ Generate unique VAPID keys for production
+
+### Production Checklist
+- [ ] Change default admin credentials
+- [ ] Enable HTTPS (required for web push)
+- [ ] Set restrictive rate limits
+- [ ] Review database user permissions
+- [ ] Enable PHP error logging (not display)
+- [ ] Backup database regularly
+- [ ] Monitor request logs for abuse patterns
+
+---
+
+## 🧪 **Development Commands**
+
+```bash
+# Frontend Development
+npm run dev          # Start Vite dev server
+npm run build        # Build production bundle
+npm run preview      # Preview production build locally
+npm run lint         # Run ESLint
+
+# Backend (requires XAMPP/Apache running)
+# Access via http://localhost/Projects/xty-request/server/
+```
+
+---
+
+## 📝 **Database Schema**
+
+### `requests` Table
+Stores all song requests with track metadata and status.
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `id` | INT (PK) | Auto-incrementing request ID |
+| `track_id` | VARCHAR(64) | Deezer track identifier |
+| `track_title` | VARCHAR(255) | Song title |
+| `track_artist` | VARCHAR(255) | Artist name |
+| `track_album` | VARCHAR(255) | Album name |
+| `track_cover` | VARCHAR(512) | Album artwork URL |
+| `track_preview` | VARCHAR(512) | 30s preview MP3 URL |
+| `track_link` | VARCHAR(512) | Deezer track page URL |
+| `nickname` | VARCHAR(64) | Optional requester nickname |
+| `message` | VARCHAR(255) | Optional request message |
+| `status` | ENUM | `new`, `accepted`, `played`, `declined` |
+| `request_ip` | VARCHAR(64) | Requester IP address |
+| `created_at` | TIMESTAMP | Request submission time |
+
+### `settings` Table
+Stores system configuration (e.g., night codes).
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `id` | INT (PK) | Setting ID |
+| `name` | VARCHAR(64) | Setting key (unique) |
+| `value` | VARCHAR(255) | Setting value |
+| `updated_at` | TIMESTAMP | Last modification time |
+
+### `push_subscriptions` Table
+Stores web push notification subscriptions per request.
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `id` | INT (PK) | Subscription ID |
+| `request_id` | INT (FK) | Associated request ID |
+| `endpoint` | TEXT | Push service endpoint URL |
+| `p256dh` | VARCHAR(255) | Encryption key |
+| `auth` | VARCHAR(255) | Auth secret |
+| `created_at` | TIMESTAMP | Subscription creation time |
+
+---
+
+## 🎨 **Design Philosophy**
+
+The XTY Request System embraces a **premium dark club aesthetic** with these design principles:
+
+- **Mobile-First:** Touch-optimized interfaces for smartphone users at events
+- **High Contrast:** Dark backgrounds with vibrant accent colors for readability in dim venues
+- **Smooth Animations:** Framer Motion transitions for polished interactions
+- **Minimal Friction:** 3-step request flow (search → select → submit)
+- **Clear Hierarchy:** Visual status indicators and color-coded queue items
+- **Responsive Layout:** Seamless experience from mobile to desktop admin panels
+
+---
+
+## 🤝 **Contributing**
+
+When contributing to this project, please maintain:
+
+### ✅ Safe to Commit
+- `src/` — All frontend source code
+- `server/api/`, `server/lib/`, `server/sql/` — Backend logic and schema
+- `public/` — Static assets and service worker
+- Configuration files: `package.json`, `vite.config.js`, `tailwind.config.js`
+
+### ❌ Never Commit
+- `server/.env`, `server/.env.local` — Backend environment configs
+- `.env.local` — Frontend environment configs
+- `node_modules/`, `vendor/` — Dependency directories
+- `dist/` — Build output (regenerated)
+
+---
+
+## 📄 **License**
+
+This project is proprietary software developed for XTY live events.
+
+---
+
+## 📞 **Support**
+
+For questions or issues:
+1. Review this README thoroughly
+2. Check `server/api/` endpoint implementations
+3. Verify environment configuration matches `.env.example`
+4. Test with browser DevTools Network tab for API debugging
+
+---
+
+<div align="center">
+
+**Built with ❤️ for the XTY experience**
+
+*Enhancing live events through seamless music interaction*
+
+</div>
