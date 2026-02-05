@@ -9,6 +9,7 @@ import RequestLockedPanel from './request/RequestLockedPanel.jsx'
 import RequestSearchPanel from './request/RequestSearchPanel.jsx'
 import RequestDetailsPanel from './request/RequestDetailsPanel.jsx'
 import RequestSuccessModal from './request/RequestSuccessModal.jsx'
+import RequestInstallModal from './request/RequestInstallModal.jsx'
 import { subscribeToPush } from '../../lib/push.js'
 
 export default function RequestFlowSection() {
@@ -23,6 +24,7 @@ export default function RequestFlowSection() {
     const [submitSuccess, setSubmitSuccess] = useState(false)
     const [submitErrorModal, setSubmitErrorModal] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [showInstall, setShowInstall] = useState(false)
     const { results, isLoading, error } = useDeezerSearch(searchQuery, {
         debounceMs: 500,
         limit: 10,
@@ -69,7 +71,7 @@ export default function RequestFlowSection() {
                 track: selectedTrack,
             })
             if (result?.id) {
-                subscribeToPush(result.id).catch(() => {})
+                subscribeToPush(result.id).catch(() => { })
             }
             setNightCode('')
             setMessage('')
@@ -133,21 +135,34 @@ export default function RequestFlowSection() {
                 </div>
                 {isUnlocked ? <SuggestedMixesSection /> : null}
             </Container>
+            <button
+                type="button"
+                onClick={() => setShowInstall(true)}
+                className="fixed top-5 right-4 z-40 rounded-full border border-border-strong bg-surface/90 px-5 py-2.5 text-[12px] uppercase tracking-[0.3em] text-secondary shadow-soft backdrop-blur transition hover:text-primary"
+            >
+                <span className="relative inline-flex items-center gap-2">
+                    <span className="relative flex h-2 w-2">
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-70"></span>
+                        <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
+                    </span>
+                    Instaliraj
+                </span>
+            </button>
             <RequestSuccessModal
-              isOpen={submitSuccess}
-              onClose={() => setSubmitSuccess(false)}
-              message="Zahtev je uspešno poslat."
+                isOpen={submitSuccess}
+                onClose={() => setSubmitSuccess(false)}
+                message="Zahtev je uspešno poslat."
             />
             <RequestSuccessModal
-              isOpen={submitErrorModal}
-              onClose={() => setSubmitErrorModal(false)}
-              message="Pogrešan Kod Žurke - Pokušaj ponovo"
-              variant="error"
+                isOpen={submitErrorModal}
+                onClose={() => setSubmitErrorModal(false)}
+                message="Pogrešan Kod Žurke - Pokušaj ponovo"
+                variant="error"
             />
+            <RequestInstallModal isOpen={showInstall} onClose={() => setShowInstall(false)} />
         </section>
     )
 }
-
 
 
 

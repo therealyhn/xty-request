@@ -2,14 +2,14 @@ import logo from '../../../assets/xty-request-logo.png'
 
 export default function RequestHeader({ isUnlocked }) {
   return (
-    <div className="flex flex-col items-center gap-6 text-center">
-      <div className="flex items-center gap-3 rounded-sm border border-border-base bg-surface/50 px-4 py-1.5 backdrop-blur-sm">
+    <div className="flex flex-col items-center gap-6 mt-14 text-center">
+      {/* <div className="flex items-center gap-3 rounded-sm border border-border-base bg-surface/50 px-4 py-1.5 backdrop-blur-sm">
         <span className="relative flex h-2 w-2">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75"></span>
           <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
         </span>
         <span className="text-label font-bold tracking-widest text-secondary">NARUCI PESMU</span>
-      </div>
+      </div> */}
 
       <div className="group relative">
         <div className="absolute -inset-8 rounded-full bg-white/5 opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-20" />
