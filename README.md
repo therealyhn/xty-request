@@ -92,26 +92,6 @@ XTY Request is a modern, mobile-first song request system designed for live even
 
 ---
 
-**Terminal 1 - Frontend:**
-```bash
-npm run dev
-```
-Frontend runs at: `http://localhost:5173`
-
-**Terminal 2 - Backend:**
-Ensure XAMPP Apache is running. Backend API accessible at:
-```
-http://localhost/Projects/xty-request/server/
-```
-
-
-- Use **File Manager** or **FTP** to upload files
-- Database credentials available in **hPanel → Databases**
-- PHP version can be configured in **hPanel → Advanced → PHP Configuration**
-- HTTPS is required for web push notifications (enable in hPanel)
-
----
-
 ## 📁 **Project Structure**
 
 ```
