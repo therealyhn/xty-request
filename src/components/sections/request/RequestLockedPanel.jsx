@@ -46,7 +46,7 @@ export default function RequestLockedPanel({ onUnlock }) {
           </button>
 
           <p className="text-[11px] uppercase tracking-widest text-secondary/50">
-            Kada nas zapratiš, otvorit će se pretraga.
+            Kada nas zapratiš, otvoriće se pretraga.
           </p>
         </div>
       </div>
