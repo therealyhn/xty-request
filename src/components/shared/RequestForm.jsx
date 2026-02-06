@@ -39,6 +39,9 @@ export default function RequestForm({
       <Button type="submit" className={disabled ? 'pointer-events-none opacity-60' : ''}>
         Pošalji zahtev
       </Button>
+      <p className="text-[11px] uppercase tracking-[0.2em] text-secondary/70">
+        Uključi notifikacije da bi dobio obaveštenje kada tvoj zahtev bude prihvaćen ili odbijen.
+      </p>
     </form>
   )
 }

@@ -1,6 +1,7 @@
 ﻿export default function RequestSuccessModal({ isOpen, onClose, message, variant = 'success' }) {
   if (!isOpen) return null
   const isError = variant === 'error'
+  const hint = 'Uključi notifikacije da bi dobio obaveštenje kada tvoj zahtev bude prihvaćen ili odbijen.'
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6">
@@ -18,6 +19,9 @@
           )}
         </div>
         <p className="text-body text-primary">{message}</p>
+        <p className="mt-2 text-[11px] uppercase tracking-[0.2em] text-secondary/70">
+          {hint}
+        </p>
         <button
           type="button"
           onClick={onClose}
