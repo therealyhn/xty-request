@@ -9,8 +9,7 @@ import AdminControlsBar from './admin/AdminControlsBar.jsx'
 import AdminStatsBar from './admin/AdminStatsBar.jsx'
 import AdminEmptyState from './admin/AdminEmptyState.jsx'
 import AdminRequestCard from './admin/AdminRequestCard.jsx'
-import Panel from '../ui/Panel.jsx'
-import Button from '../ui/Button.jsx'
+import AdminNightCodeModal from './admin/AdminNightCodeModal.jsx'
 
 export default function AdminQueueSection() {
   const [status, setStatus] = useState('all')
@@ -21,6 +20,7 @@ export default function AdminQueueSection() {
   const [forceShowActions, setForceShowActions] = useState(() => new Set())
   const [nightCode, setNightCode] = useState('')
   const [nightCodeStatus, setNightCodeStatus] = useState('')
+  const [showNightCodeModal, setShowNightCodeModal] = useState(false)
 
   const { items, isLoading, error, lastSuccess, reload, updateStatus } = useAdminQueue({
     username: credentials.username,
@@ -106,7 +106,7 @@ export default function AdminQueueSection() {
     <section className="relative z-10 pb-20 pt-12 md:pt-16">
       <Container className="max-w-4xl">
         <div className="flex flex-col items-center gap-10">
-          <AdminHeader />
+          <AdminHeader onNightCodeOpen={() => setShowNightCodeModal(true)} />
 
           {!isUnlocked ? (
             <AdminLoginPanel
@@ -126,38 +126,9 @@ export default function AdminQueueSection() {
                 isLoading={isLoading}
               />
 
-              <Panel className="w-full border-border-light/50 bg-surface/80 p-4 backdrop-blur-xl">
-                <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                  <div className="flex flex-1 flex-col gap-2">
-                    <label className="text-xs font-medium text-secondary">Night Code</label>
-                    <input
-                      type="text"
-                      value={nightCode}
-                      onChange={(event) => setNightCode(event.target.value)}
-                      className="w-full rounded-sm border border-border-base bg-black/20 px-3 py-2 text-sm text-primary outline-none transition focus-visible:ring-2 focus-visible:ring-primary/40"
-                      placeholder="Upiši ili generiši kod"
-                    />
-                    {nightCodeStatus === 'saved' ? (
-                      <span className="text-xs text-green-400">Sačuvano.</span>
-                    ) : null}
-                    {nightCodeStatus === 'error' ? (
-                      <span className="text-xs text-red-400">Greška pri čuvanju.</span>
-                    ) : null}
-                  </div>
-                  <div className="flex gap-2">
-                    <Button variant="ghost" onClick={handleGenerateNightCode}>
-                      Generate
-                    </Button>
-                    <Button onClick={handleSaveNightCode}>
-                      Save
-                    </Button>
-                  </div>
-                </div>
-              </Panel>
-
               <AdminStatsBar total={totalLabel} />
 
-              <div className="flex flex-col gap-3">
+              <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
                 <AnimatePresence mode="popLayout" initial={false}>
                   {filteredItems.map((item) => (
                     <AdminRequestCard
@@ -184,9 +155,18 @@ export default function AdminQueueSection() {
                 {!isLoading && !filteredItems.length && <AdminEmptyState />}
               </div>
             </div>
-          )}
+          )} 
         </div>
       </Container>
+      <AdminNightCodeModal
+        isOpen={showNightCodeModal}
+        onClose={() => setShowNightCodeModal(false)}
+        nightCode={nightCode}
+        onNightCodeChange={setNightCode}
+        onGenerate={handleGenerateNightCode}
+        onSave={handleSaveNightCode}
+        status={nightCodeStatus}
+      />
     </section>
   )
 }

@@ -26,23 +26,18 @@ export default function AdminRequestCard({
     >
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-      <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+      <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-start sm:justify-between sm:gap-5">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
           <div className="flex items-center gap-3 mb-1">
             <AdminStatusBadge status={item.status} />
-            <span className="text-[10px] text-secondary/60 font-mono hidden sm:inline-block">
-              ID: #{item.id.toString().slice(-4)}
-            </span>
           </div>
 
-          <h3 className="line-clamp-1 text-lg font-bold leading-tight text-white group-hover:text-primary transition-colors">
+          <h3 className="line-clamp-1 text-base font-bold leading-tight text-white group-hover:text-primary transition-colors">
             {item.track_title}
           </h3>
 
           <div className="flex flex-wrap items-center gap-x-2 text-sm text-secondary/80">
             <span className="font-medium text-white/80">{item.track_artist}</span>
-            <span className="h-1 w-1 rounded-full bg-border-strong opacity-50" />
-            <span className="italic opacity-70">{item.track_album}</span>
           </div>
 
           {item.message && (
@@ -63,7 +58,7 @@ export default function AdminRequestCard({
           ) : null}
         </div>
 
-        <div className="flex shrink-0 flex-row gap-2 pt-2 sm:flex-col sm:items-end sm:pt-0">
+        <div className="flex shrink-0 flex-row gap-2 pt-1 sm:flex-col sm:items-end sm:pt-0">
           <div className="flex items-center gap-2 rounded-sm bg-black/20 p-1">
             {isActionsHidden ? (
               <AdminActionButton

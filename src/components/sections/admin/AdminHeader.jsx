@@ -1,6 +1,6 @@
 import logo from '../../../assets/xty-request-logo.png'
 
-export default function AdminHeader() {
+export default function AdminHeader({ onNightCodeOpen }) {
   return (
     <div className="flex flex-col items-center gap-6 text-center">
       <div className="flex items-center gap-3 rounded-sm border border-border-base bg-surface/50 px-4 py-1.5 backdrop-blur-sm">
@@ -16,11 +16,19 @@ export default function AdminHeader() {
         <img
           src={logo}
           alt="XTY logo"
-          className="relative h-[9rem] w-auto drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] transition-transform duration-500 sm:h-[12rem] md:h-[16rem]"
           width={200}
+          className="relative h-[9rem] w-auto drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] transition-transform duration-500 sm:h-[8rem] md:h-[10rem]"
           height={100}
         />
       </div>
+
+      <button
+        type="button"
+        onClick={onNightCodeOpen}
+        className="rounded-sm border border-border-strong bg-surface/90 px-4 py-2 text-[11px] uppercase tracking-[0.25em] text-secondary shadow-soft backdrop-blur transition hover:text-primary"
+      >
+        Kod Žurke
+      </button>
 
     </div>
   )
