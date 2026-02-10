@@ -1,10 +1,7 @@
-﻿import Button from '../ui/Button.jsx'
-import TextInput from '../ui/TextInput.jsx'
+import Button from '../ui/Button.jsx'
 
 export default function RequestForm({
-  nightCode,
   message,
-  onNightCodeChange,
   onMessageChange,
   onSubmit,
   disabled,
@@ -17,13 +14,6 @@ export default function RequestForm({
         <h3 className="text-md font-semibold uppercase">Pošalji zahtev</h3>
       </div>
       <div className="flex flex-col gap-2">
-        <TextInput
-          id="night-code"
-          placeholder="Kod Žurke"
-          value={nightCode}
-          onChange={(event) => onNightCodeChange(event.target.value)}
-          disabled={disabled}
-        />
         <div className="flex flex-col gap-2">
           <textarea
             id="message"

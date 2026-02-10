@@ -2,14 +2,12 @@
 import { AnimatePresence } from 'framer-motion'
 import Container from '../ui/Container.jsx'
 import { useAdminQueue } from '../../hooks/useAdminQueue.js'
-import { fetchNightCode, updateNightCode } from '../../lib/api/admin.js'
 import AdminHeader from './admin/AdminHeader.jsx'
 import AdminLoginPanel from './admin/AdminLoginPanel.jsx'
 import AdminControlsBar from './admin/AdminControlsBar.jsx'
 import AdminStatsBar from './admin/AdminStatsBar.jsx'
 import AdminEmptyState from './admin/AdminEmptyState.jsx'
 import AdminRequestCard from './admin/AdminRequestCard.jsx'
-import AdminNightCodeModal from './admin/AdminNightCodeModal.jsx'
 
 export default function AdminQueueSection() {
   const [status, setStatus] = useState('all')
@@ -18,9 +16,6 @@ export default function AdminQueueSection() {
   const [credentials, setCredentials] = useState({ username: '', password: '' })
   const [isUnlocked, setIsUnlocked] = useState(false)
   const [forceShowActions, setForceShowActions] = useState(() => new Set())
-  const [nightCode, setNightCode] = useState('')
-  const [nightCodeStatus, setNightCodeStatus] = useState('')
-  const [showNightCodeModal, setShowNightCodeModal] = useState(false)
 
   const { items, isLoading, error, lastSuccess, reload, updateStatus } = useAdminQueue({
     username: credentials.username,
@@ -40,24 +35,6 @@ export default function AdminQueueSection() {
       setIsUnlocked(true)
     }
   }, [lastSuccess])
-
-  useEffect(() => {
-    const loadNightCode = async () => {
-      if (!credentials.username || !credentials.password) return
-      try {
-        const code = await fetchNightCode({
-          username: credentials.username,
-          password: credentials.password,
-        })
-        setNightCode(code)
-      } catch {
-        setNightCode('')
-      }
-    }
-    if (isUnlocked) {
-      loadNightCode()
-    }
-  }, [isUnlocked, credentials])
 
   const showActionsFor = (id) => {
     setForceShowActions((prev) => {
@@ -82,31 +59,11 @@ export default function AdminQueueSection() {
     })
   }
 
-  const handleSaveNightCode = async () => {
-    setNightCodeStatus('')
-    try {
-      await updateNightCode({
-        username: credentials.username,
-        password: credentials.password,
-        nightCode: nightCode.trim(),
-      })
-      setNightCodeStatus('saved')
-    } catch {
-      setNightCodeStatus('error')
-    }
-  }
-
-  const handleGenerateNightCode = () => {
-    const code = Math.floor(1000 + Math.random() * 9000).toString()
-    setNightCode(code)
-    setNightCodeStatus('')
-  }
-
   return (
     <section className="relative z-10 pb-20 pt-12 md:pt-16">
       <Container className="max-w-4xl">
         <div className="flex flex-col items-center gap-10">
-          <AdminHeader onNightCodeOpen={() => setShowNightCodeModal(true)} />
+          <AdminHeader />
 
           {!isUnlocked ? (
             <AdminLoginPanel
@@ -155,18 +112,9 @@ export default function AdminQueueSection() {
                 {!isLoading && !filteredItems.length && <AdminEmptyState />}
               </div>
             </div>
-          )} 
+          )}
         </div>
       </Container>
-      <AdminNightCodeModal
-        isOpen={showNightCodeModal}
-        onClose={() => setShowNightCodeModal(false)}
-        nightCode={nightCode}
-        onNightCodeChange={setNightCode}
-        onGenerate={handleGenerateNightCode}
-        onSave={handleSaveNightCode}
-        status={nightCodeStatus}
-      />
     </section>
   )
 }

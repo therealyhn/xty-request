@@ -14,7 +14,7 @@ export default function RequestInstallModal({ isOpen, onClose }) {
           </div>
           <div>
             <div className="mb-1 text-xs font-semibold text-primary">iOS</div>
-            <div>1. Otvori u Safari <br /> 2. Share <br /> 3. Add to Home Screen.</div>
+            <div>1. Otvori u Safari <br /> 2. Share <br /> 3. More <br /> 4. Add to Home Screen.</div>
           </div>
         </div>
         <p className="mt-4 text-[14px] font-semibold text-center uppercase tracking-[0.2em] text-secondary/70">

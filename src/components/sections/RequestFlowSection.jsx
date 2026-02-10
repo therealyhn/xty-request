@@ -18,11 +18,9 @@ export default function RequestFlowSection() {
     // Search State
     const [searchQuery, setSearchQuery] = useState('')
     const [selectedTrack, setSelectedTrack] = useState(null)
-    const [nightCode, setNightCode] = useState('')
     const [message, setMessage] = useState('')
     const [submitError, setSubmitError] = useState('')
     const [submitSuccess, setSubmitSuccess] = useState(false)
-    const [submitErrorModal, setSubmitErrorModal] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [showInstall, setShowInstall] = useState(false)
     const { results, isLoading, error } = useDeezerSearch(searchQuery, {
@@ -56,7 +54,6 @@ export default function RequestFlowSection() {
         event.preventDefault()
         setSubmitError('')
         setSubmitSuccess(false)
-        setSubmitErrorModal(false)
 
         if (!selectedTrack) {
             setSubmitError('Izaberi pesmu.')
@@ -66,23 +63,18 @@ export default function RequestFlowSection() {
         setIsSubmitting(true)
         try {
             const result = await createRequest({
-                night_code: nightCode.trim(),
                 message: message.trim(),
                 track: selectedTrack,
             })
             if (result?.id) {
                 subscribeToPush(result.id).catch(() => { })
             }
-            setNightCode('')
             setMessage('')
             setSelectedTrack(null)
             setSubmitSuccess(true)
         } catch (err) {
             const message = err?.message || 'Greška pri slanju.'
             setSubmitError(message)
-            if (message.toLowerCase().includes('night code')) {
-                setSubmitErrorModal(true)
-            }
         } finally {
             setIsSubmitting(false)
         }
@@ -120,9 +112,7 @@ export default function RequestFlowSection() {
                                     <RequestDetailsPanel
                                         selectedTrack={selectedTrack}
                                         onRemoveTrack={handleTrackRemove}
-                                        nightCode={nightCode}
                                         message={message}
-                                        onNightCodeChange={setNightCode}
                                         onMessageChange={setMessage}
                                         onSubmit={handleSubmit}
                                         isSubmitting={isSubmitting}
@@ -153,16 +143,9 @@ export default function RequestFlowSection() {
                 onClose={() => setSubmitSuccess(false)}
                 message="Zahtev je uspešno poslat."
             />
-            <RequestSuccessModal
-                isOpen={submitErrorModal}
-                onClose={() => setSubmitErrorModal(false)}
-                message="Pogrešan Kod Žurke - Pokušaj ponovo"
-                variant="error"
-            />
             <RequestInstallModal isOpen={showInstall} onClose={() => setShowInstall(false)} />
         </section>
     )
 }
-
 
 

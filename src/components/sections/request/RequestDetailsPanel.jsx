@@ -4,9 +4,7 @@ import RequestForm from '../../shared/RequestForm.jsx'
 export default function RequestDetailsPanel({
   selectedTrack,
   onRemoveTrack,
-  nightCode,
   message,
-  onNightCodeChange,
   onMessageChange,
   onSubmit,
   isSubmitting,
@@ -20,9 +18,7 @@ export default function RequestDetailsPanel({
         className={`transition-all duration-500 ${selectedTrack ? 'opacity-100' : 'pointer-events-none opacity-40 blur-[2px]'}`}
       >
         <RequestForm
-          nightCode={nightCode}
           message={message}
-          onNightCodeChange={onNightCodeChange}
           onMessageChange={onMessageChange}
           onSubmit={onSubmit}
           disabled={!selectedTrack || isSubmitting}

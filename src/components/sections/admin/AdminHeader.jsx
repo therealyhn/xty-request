@@ -1,6 +1,6 @@
-import logo from '../../../assets/xty-request-logo.png'
+﻿import logo from '../../../assets/xty-request-logo.png'
 
-export default function AdminHeader({ onNightCodeOpen }) {
+export default function AdminHeader() {
   return (
     <div className="flex flex-col items-center gap-6 text-center">
       <div className="flex items-center gap-3 rounded-sm border border-border-base bg-surface/50 px-4 py-1.5 backdrop-blur-sm">
@@ -21,15 +21,6 @@ export default function AdminHeader({ onNightCodeOpen }) {
           height={100}
         />
       </div>
-
-      <button
-        type="button"
-        onClick={onNightCodeOpen}
-        className="rounded-sm border border-border-strong bg-surface/90 px-4 py-2 text-[11px] uppercase tracking-[0.25em] text-secondary shadow-soft backdrop-blur transition hover:text-primary"
-      >
-        Kod Žurke
-      </button>
-
     </div>
   )
 }
