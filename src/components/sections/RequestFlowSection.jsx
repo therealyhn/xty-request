@@ -122,6 +122,14 @@ export default function RequestFlowSection() {
                             </motion.div>
                         )}
                     </AnimatePresence>
+                    <a
+                        href="https://jovanljusic.com"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[16px] uppercase tracking-[0.3em] text-secondary/60 transition-colors hover:text-secondary"
+                    >
+                        Developed &amp; Powered by Yhn (XTY)
+                    </a>
                 </div>
                 {isUnlocked ? <SuggestedMixesSection /> : null}
             </Container>
@@ -144,6 +152,7 @@ export default function RequestFlowSection() {
                 message="Zahtev je uspešno poslat."
             />
             <RequestInstallModal isOpen={showInstall} onClose={() => setShowInstall(false)} />
+
         </section>
     )
 }
