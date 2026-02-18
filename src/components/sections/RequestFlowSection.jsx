@@ -136,7 +136,7 @@ export default function RequestFlowSection() {
             <button
                 type="button"
                 onClick={() => setShowInstall(true)}
-                className="fixed top-5 right-4 z-40 rounded-full border border-border-strong bg-surface/90 px-5 py-2.5 text-[12px] uppercase tracking-[0.3em] text-secondary shadow-soft backdrop-blur transition hover:text-primary"
+                className="fixed top-4 right-3 z-40 rounded-sm border border-border-strong bg-surface/90 px-3 py-1.5 text-[10px] uppercase tracking-[0.18em] text-secondary shadow-soft backdrop-blur transition hover:text-primary sm:top-5 sm:right-4 sm:px-5 sm:py-2 sm:text-[12px] sm:tracking-[0.3em]"
             >
                 <span className="relative inline-flex items-center gap-2">
                     <span className="relative flex h-2 w-2">
@@ -156,5 +156,4 @@ export default function RequestFlowSection() {
         </section>
     )
 }
-
 
