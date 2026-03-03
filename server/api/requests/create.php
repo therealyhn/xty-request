@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../../lib/Database.php';
+require_once __DIR__ . '/../../lib/Events.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     jsonResponse(['ok' => true], 200);
@@ -50,13 +51,16 @@ $trackCover = (string) ($track['album']['cover_medium'] ?? '');
 $trackPreview = (string) ($track['preview'] ?? '');
 $trackLink = (string) ($track['link'] ?? '');
 $requestIp = getClientIp();
+$pdo = db();
+$eventId = getActiveEventId($pdo);
 
 // Request limit: max 2 requests per fixed 15-minute window, anchored at user's first request.
-$firstRequestStmt = db()->prepare(
-    'SELECT MIN(created_at) AS first_at FROM requests WHERE request_ip = :request_ip'
+$firstRequestStmt = $pdo->prepare(
+    'SELECT MIN(created_at) AS first_at FROM requests WHERE request_ip = :request_ip AND event_id = :event_id'
 );
 $firstRequestStmt->execute([
     ':request_ip' => $requestIp,
+    ':event_id' => $eventId,
 ]);
 $firstRequestData = $firstRequestStmt->fetch();
 $firstAt = isset($firstRequestData['first_at']) ? strtotime((string) $firstRequestData['first_at']) : false;
@@ -71,15 +75,17 @@ if ($firstAt !== false) {
     $windowStart = date('Y-m-d H:i:s', $windowStartTs);
     $windowEnd = date('Y-m-d H:i:s', $windowEndTs);
 
-    $windowCountStmt = db()->prepare(
+    $windowCountStmt = $pdo->prepare(
         'SELECT COUNT(*) AS total
          FROM requests
          WHERE request_ip = :request_ip
+           AND event_id = :event_id
            AND created_at >= :window_start
            AND created_at < :window_end'
     );
     $windowCountStmt->execute([
         ':request_ip' => $requestIp,
+        ':event_id' => $eventId,
         ':window_start' => $windowStart,
         ':window_end' => $windowEnd,
     ]);
@@ -97,9 +103,9 @@ if ($firstAt !== false) {
     }
 }
 
-$stmt = db()->prepare(
-    'INSERT INTO requests (track_id, track_title, track_artist, track_album, track_cover, track_preview, track_link, nickname, message, status, request_ip)
-     VALUES (:track_id, :track_title, :track_artist, :track_album, :track_cover, :track_preview, :track_link, :nickname, :message, :status, :request_ip)'
+$stmt = $pdo->prepare(
+    'INSERT INTO requests (track_id, track_title, track_artist, track_album, track_cover, track_preview, track_link, nickname, message, status, request_ip, event_id)
+     VALUES (:track_id, :track_title, :track_artist, :track_album, :track_cover, :track_preview, :track_link, :nickname, :message, :status, :request_ip, :event_id)'
 );
 
 $stmt->execute([
@@ -114,7 +120,8 @@ $stmt->execute([
     ':message' => $message,
     ':status' => 'new',
     ':request_ip' => $requestIp,
+    ':event_id' => $eventId,
 ]);
 
-$id = (int) db()->lastInsertId();
+$id = (int) $pdo->lastInsertId();
 jsonResponse(['ok' => true, 'id' => $id], 201);

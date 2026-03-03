@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { fetchRequests, updateRequestStatus } from '../lib/api/admin.js';
 
-export function useAdminQueue({ username, password, status }) {
+export function useAdminQueue({ username, password, status, eventId }) {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -19,6 +19,7 @@ export function useAdminQueue({ username, password, status }) {
         username,
         password,
         status: status && status !== 'all' ? status : '',
+        eventId,
       });
       setItems(data);
       setLastSuccess(true);
@@ -28,7 +29,7 @@ export function useAdminQueue({ username, password, status }) {
     } finally {
       setIsLoading(false);
     }
-  }, [username, password, status, canFetch]);
+  }, [username, password, status, eventId, canFetch]);
 
   useEffect(() => {
     load();
