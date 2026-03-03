@@ -1,8 +1,8 @@
-﻿import logo from '../../../assets/xty-request-logo.png'
+import logo from '../../../assets/xty-request-logo.png'
 
-export default function AdminHeader() {
+export default function AdminHeader({ className = '', logoClassName = '' }) {
   return (
-    <div className="flex flex-col items-center gap-6 text-center">
+    <div className={`flex flex-col items-center gap-4 text-center ${className}`}>
       <div className="flex items-center gap-3 rounded-sm border border-border-base bg-surface/50 px-4 py-1.5 backdrop-blur-sm">
         <span className="relative flex h-2 w-2">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75"></span>
@@ -17,7 +17,7 @@ export default function AdminHeader() {
           src={logo}
           alt="XTY logo"
           width={200}
-          className="relative h-[9rem] w-auto drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] transition-transform duration-500 sm:h-[8rem] md:h-[10rem]"
+          className={`relative h-[6.5rem] w-auto drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] transition-transform duration-500 sm:h-[7rem] md:h-[8rem] lg:h-[10rem] ${logoClassName}`}
           height={100}
         />
       </div>

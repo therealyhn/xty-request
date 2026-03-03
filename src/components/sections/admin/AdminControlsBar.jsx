@@ -1,11 +1,4 @@
-import AdminIconRefresh from './AdminIconRefresh.jsx'
-import { STATUS_TABS } from './adminStatus.js'
-
 export default function AdminControlsBar({
-  status,
-  onStatusChange,
-  onReload,
-  isLoading,
   events,
   activeEventId,
   onActiveEventChange,
@@ -19,97 +12,82 @@ export default function AdminControlsBar({
   isEventsLoading,
 }) {
   return (
-    <div className="sticky top-4 z-20 flex flex-col gap-4 rounded-sm border border-white/5 bg-[#0A0A0A]/80 p-2 shadow-2xl backdrop-blur-xl transition-all md:flex-row md:items-center md:justify-between">
-      <div className="flex flex-1 flex-col gap-2">
-        <div className="flex flex-1 overflow-x-auto rounded-xs bg-white/5 p-1 no-scrollbar">
-          {STATUS_TABS.map((tab) => {
-            const isActive = status === tab.id
-            return (
-              <button
-                key={tab.id}
-                onClick={() => onStatusChange(tab.id)}
-                className={`relative flex-1 whitespace-nowrap rounded-xs px-4 py-1.5 text-xs font-semibold transition-all ${isActive
-                  ? 'bg-primary text-black shadow-lg'
-                  : 'text-secondary hover:text-white'
-                  }`}
-              >
-                {tab.label}
-              </button>
-            )
-          })}
-        </div>
-
-        <div className="flex flex-col gap-2 md:flex-row md:items-center">
-          <select
-            value={activeEventId || ''}
-            onChange={(event) => onActiveEventChange(Number(event.target.value))}
-            className="w-full rounded-xs border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white outline-none transition-colors hover:border-white/20 focus:border-white/30 md:max-w-[240px]"
-          >
-            {!events.length ? (
-              <option value="" className="bg-[#0A0A0A]">
-                Nema eventa
-              </option>
-            ) : null}
-            {events.map((eventItem) => (
-              <option key={eventItem.id} value={eventItem.id} className="bg-[#0A0A0A]">
-                {eventItem.name}
-              </option>
-            ))}
-          </select>
-
-          <div className="flex w-full flex-col gap-2 md:flex-row md:items-center">
-            <input
-              type="text"
-              value={newEventName}
-              onChange={(event) => onNewEventNameChange(event.target.value)}
-              placeholder="Naziv nove zurke"
-              className="w-full rounded-xs border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white placeholder:text-secondary/60 outline-none transition-colors hover:border-white/20 focus:border-white/30 md:max-w-[220px]"
-            />
-
-            <button
-              onClick={onCreateEvent}
-              className="rounded-xs border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:border-white/20 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={isEventsLoading || !newEventName.trim()}
+    <div className="sticky top-4 z-20 rounded-sm border border-white/5 bg-[#0A0A0A]/90 p-2.5 shadow-2xl backdrop-blur-xl sm:p-3">
+      <div className="flex flex-col gap-2.5 sm:gap-3">
+        <div className="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-12">
+          <div className="flex flex-col gap-2 xl:col-span-4 md:max-xl:max-w-[190px]">
+            <label className="text-[10px] uppercase tracking-widest text-secondary/70">Aktivni Event</label>
+            <select
+              value={activeEventId || ''}
+              onChange={(event) => onActiveEventChange(Number(event.target.value))}
+                className="h-[36px] w-full rounded-xs border border-white/10 bg-white/5 px-3 text-[11px] font-semibold text-white outline-none transition-colors hover:border-white/20 focus:border-white/30 sm:h-[38px] sm:text-xs md:max-xl:max-w-[190px]"
             >
-              Kreiraj event
-            </button>
+              {!events.length ? (
+                <option value="" className="bg-[#0A0A0A]">
+                  Nema eventa
+                </option>
+              ) : null}
+              {events.map((eventItem) => (
+                <option key={eventItem.id} value={eventItem.id} className="bg-[#0A0A0A]">
+                  {eventItem.name}
+                </option>
+              ))}
+            </select>
           </div>
 
-          <div className="flex w-full flex-col gap-2 md:flex-row md:items-center">
-            <input
-              type="text"
-              value={renameEventName}
-              onChange={(event) => onRenameEventNameChange(event.target.value)}
-              placeholder="Novo ime aktivnog eventa"
-              className="w-full rounded-xs border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white placeholder:text-secondary/60 outline-none transition-colors hover:border-white/20 focus:border-white/30 md:max-w-[220px]"
-            />
+          <div className="flex flex-col gap-2 xl:col-span-4">
+            <label className="text-[10px] uppercase tracking-widest text-secondary/70">Novi Event</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newEventName}
+                onChange={(event) => onNewEventNameChange(event.target.value)}
+                placeholder="Naziv nove zurke"
+                className="h-[36px] min-w-0 flex-1 rounded-xs border border-white/10 bg-white/5 px-3 text-[11px] font-semibold text-white placeholder:text-secondary/60 outline-none transition-colors hover:border-white/20 focus:border-white/30 sm:h-[38px] sm:text-xs md:max-xl:w-[180px] md:max-xl:flex-none"
+              />
+              <button
+                onClick={onCreateEvent}
+                className="h-[36px] shrink-0 rounded-xs border border-white/10 bg-white/5 px-3 text-[11px] font-bold uppercase tracking-wider text-white transition-colors hover:border-white/20 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50 sm:h-[38px] sm:text-xs"
+                disabled={isEventsLoading || !newEventName.trim()}
+              >
+                Kreiraj
+              </button>
+            </div>
+          </div>
 
-            <button
-              onClick={onRenameEvent}
-              className="rounded-xs border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:border-white/20 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={isEventsLoading || !activeEventId || !renameEventName.trim()}
-            >
-              Preimenuj
-            </button>
+          <div className="flex flex-col gap-2 xl:col-span-4">
+            <label className="text-[10px] uppercase tracking-widest text-secondary/70">Preimenuj Aktivni</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={renameEventName}
+                onChange={(event) => onRenameEventNameChange(event.target.value)}
+                placeholder="Novo ime aktivnog eventa"
+                className="h-[36px] min-w-0 flex-1 rounded-xs border border-white/10 bg-white/5 px-3 text-[11px] font-semibold text-white placeholder:text-secondary/60 outline-none transition-colors hover:border-white/20 focus:border-white/30 sm:h-[38px] sm:text-xs md:max-xl:w-[180px] md:max-xl:flex-none"
+              />
+              <button
+                onClick={onRenameEvent}
+                className="h-[36px] shrink-0 rounded-xs border border-white/10 bg-white/5 px-3 text-[11px] font-bold uppercase tracking-wider text-white transition-colors hover:border-white/20 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50 sm:h-[38px] sm:text-xs"
+                disabled={isEventsLoading || !activeEventId || !renameEventName.trim()}
+              >
+                Preimenuj
+              </button>
+            </div>
+          </div>
 
-            <button
-              onClick={onDeleteEvent}
-              className="rounded-xs border border-red-500/25 bg-red-500/10 px-3 py-2 text-xs font-bold uppercase tracking-wider text-red-200 transition-colors hover:border-red-500/40 hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={isEventsLoading || !activeEventId}
-            >
-              Obrisi event
-            </button>
+          <div className="xl:col-span-12">
+            <div className="flex justify-end md:max-xl:justify-start">
+              <button
+                onClick={onDeleteEvent}
+                className="h-[34px] rounded-xs border border-red-500/25 bg-red-500/10 px-3 text-[11px] font-bold uppercase tracking-wider text-red-200 transition-colors hover:border-red-500/40 hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-50 sm:h-[36px] sm:text-xs"
+                disabled={isEventsLoading || !activeEventId}
+              >
+                Obrisi aktivni event
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
-      <button
-        onClick={onReload}
-        className="flex shrink-0 items-center justify-center gap-2 rounded-xs border border-white/5 bg-white/5 px-4 py-2 text-xs font-bold uppercase tracking-wider text-secondary transition-colors hover:bg-white/10 hover:text-white"
-      >
-        <AdminIconRefresh className={isLoading ? 'animate-spin' : ''} />
-        <span>Osvezi</span>
-      </button>
     </div>
   )
 }

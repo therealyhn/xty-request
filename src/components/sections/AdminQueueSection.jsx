@@ -6,6 +6,7 @@ import { createEvent, deleteEvent, fetchEvents, renameEvent, setActiveEvent } fr
 import AdminHeader from './admin/AdminHeader.jsx'
 import AdminLoginPanel from './admin/AdminLoginPanel.jsx'
 import AdminControlsBar from './admin/AdminControlsBar.jsx'
+import AdminFilterBar from './admin/AdminFilterBar.jsx'
 import AdminStatsBar from './admin/AdminStatsBar.jsx'
 import AdminEmptyState from './admin/AdminEmptyState.jsx'
 import AdminRequestCard from './admin/AdminRequestCard.jsx'
@@ -192,37 +193,48 @@ export default function AdminQueueSection() {
 
   return (
     <section className="relative z-10 pb-20 pt-12 md:pt-16">
-      <Container className="max-w-4xl">
+      <Container className="max-w-6xl">
         <div className="flex flex-col items-center gap-10">
-          <AdminHeader />
-
           {!isUnlocked ? (
-            <AdminLoginPanel
-              usernameInput={usernameInput}
-              passwordInput={passwordInput}
-              onUsernameChange={(event) => setUsernameInput(event.target.value)}
-              onPasswordChange={(event) => setPasswordInput(event.target.value)}
-              onConnect={handleConnect}
-              showError={Boolean(error && credentials.username)}
-            />
+            <>
+              <AdminHeader />
+              <AdminLoginPanel
+                usernameInput={usernameInput}
+                passwordInput={passwordInput}
+                onUsernameChange={(event) => setUsernameInput(event.target.value)}
+                onPasswordChange={(event) => setPasswordInput(event.target.value)}
+                onConnect={handleConnect}
+                showError={Boolean(error && credentials.username)}
+              />
+            </>
           ) : (
             <div className="flex w-full flex-col gap-6">
-              <AdminControlsBar
+              <div className="flex flex-col gap-4 md:max-xl:grid md:max-xl:grid-cols-[250px_minmax(0,1fr)] md:max-xl:items-start md:max-xl:gap-5">
+                <AdminHeader
+                  className="md:max-xl:items-start md:max-xl:text-left"
+                  logoClassName="md:max-xl:h-[7.2rem]"
+                />
+
+                <AdminControlsBar
+                  events={events}
+                  activeEventId={activeEventId}
+                  onActiveEventChange={handleActiveEventChange}
+                  newEventName={newEventName}
+                  onNewEventNameChange={setNewEventName}
+                  onCreateEvent={handleCreateEvent}
+                  renameEventName={renameEventName}
+                  onRenameEventNameChange={setRenameEventName}
+                  onRenameEvent={handleRenameEvent}
+                  onDeleteEvent={() => setIsDeleteModalOpen(true)}
+                  isEventsLoading={isEventsLoading}
+                />
+              </div>
+
+              <AdminFilterBar
                 status={status}
                 onStatusChange={setStatus}
                 onReload={reload}
                 isLoading={isLoading}
-                events={events}
-                activeEventId={activeEventId}
-                onActiveEventChange={handleActiveEventChange}
-                newEventName={newEventName}
-                onNewEventNameChange={setNewEventName}
-                onCreateEvent={handleCreateEvent}
-                renameEventName={renameEventName}
-                onRenameEventNameChange={setRenameEventName}
-                onRenameEvent={handleRenameEvent}
-                onDeleteEvent={() => setIsDeleteModalOpen(true)}
-                isEventsLoading={isEventsLoading}
               />
 
               {eventsError ? (
