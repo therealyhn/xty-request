@@ -1,7 +1,33 @@
-﻿export default function RequestSuccessModal({ isOpen, onClose, message, variant = 'success' }) {
-  if (!isOpen) return null
+import { useEffect, useMemo, useState } from 'react'
+
+export default function RequestSuccessModal({ isOpen, onClose, message, variant = 'success', hint, retrySeconds = null }) {
   const isError = variant === 'error'
-  const hint = 'Uključi notifikacije da bi dobio obaveštenje kada tvoj zahtev bude prihvaćen ili odbijen.'
+  const defaultHint = isError
+    ? 'Pokusaj ponovo nakon isteka ogranicenja.'
+    : 'Ukljuci notifikacije da bi dobio obavestenje kada tvoj zahtev bude prihvacen ili odbijen.'
+  const hintText = hint ?? defaultHint
+  const [remainingSeconds, setRemainingSeconds] = useState(() => Number(retrySeconds) || 0)
+
+  useEffect(() => {
+    setRemainingSeconds(Number(retrySeconds) || 0)
+  }, [retrySeconds, isOpen])
+
+  useEffect(() => {
+    if (!isOpen || !isError || remainingSeconds <= 0) return undefined
+    const timer = setInterval(() => {
+      setRemainingSeconds((prev) => Math.max(0, prev - 1))
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [isOpen, isError, remainingSeconds])
+
+  const remainingText = useMemo(() => {
+    const mins = Math.floor(remainingSeconds / 60)
+    const secs = remainingSeconds % 60
+    if (mins > 0) return `${mins} min ${secs.toString().padStart(2, '0')} s`
+    return `${secs} s`
+  }, [remainingSeconds])
+
+  if (!isOpen) return null
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6">
@@ -19,9 +45,12 @@
           )}
         </div>
         <p className="text-body text-primary">{message}</p>
-        <p className="mt-2 text-[11px] uppercase tracking-[0.2em] text-secondary/70">
-          {hint}
-        </p>
+        {isError && remainingSeconds > 0 ? (
+          <p className="mt-2 text-sm font-semibold text-red-300">
+            Mozes ponovo da posaljes zahtev za: {remainingText}
+          </p>
+        ) : null}
+        <p className="mt-2 text-[11px] uppercase tracking-[0.2em] text-secondary/70">{hintText}</p>
         <button
           type="button"
           onClick={onClose}

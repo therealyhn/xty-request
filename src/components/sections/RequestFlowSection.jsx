@@ -20,7 +20,13 @@ export default function RequestFlowSection() {
     const [selectedTrack, setSelectedTrack] = useState(null)
     const [message, setMessage] = useState('')
     const [submitError, setSubmitError] = useState('')
-    const [submitSuccess, setSubmitSuccess] = useState(false)
+    const [submitModal, setSubmitModal] = useState({
+        isOpen: false,
+        message: '',
+        hint: '',
+        variant: 'success',
+        retrySeconds: null,
+    })
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [showInstall, setShowInstall] = useState(false)
     const { results, isLoading, error } = useDeezerSearch(searchQuery, {
@@ -53,7 +59,7 @@ export default function RequestFlowSection() {
     const handleSubmit = async (event) => {
         event.preventDefault()
         setSubmitError('')
-        setSubmitSuccess(false)
+        setSubmitModal((prev) => ({ ...prev, isOpen: false }))
 
         if (!selectedTrack) {
             setSubmitError('Izaberi pesmu.')
@@ -71,10 +77,35 @@ export default function RequestFlowSection() {
             }
             setMessage('')
             setSelectedTrack(null)
-            setSubmitSuccess(true)
+            setSubmitModal({
+                isOpen: true,
+                message: 'Zahtev je uspesno poslat.',
+                hint: 'Ukljuci notifikacije da bi dobio obavestenje kada tvoj zahtev bude prihvacen ili odbijen.',
+                variant: 'success',
+                retrySeconds: null,
+            })
         } catch (err) {
-            const message = err?.message || 'Greška pri slanju.'
-            setSubmitError(message)
+            const retrySeconds = Number(err?.retrySeconds || 0)
+            if (err?.status === 429) {
+                setSubmitModal({
+                    isOpen: true,
+                    message: 'Zahtev nije poslat. Dostignut je limit od 2 zahteva na 15 minuta.',
+                    hint: 'Sacekaj da vreme istekne pa posalji novi zahtev.',
+                    variant: 'error',
+                    retrySeconds: retrySeconds > 0 ? retrySeconds : null,
+                })
+                setSubmitError('')
+            } else {
+                const message = err?.message || 'Greska pri slanju zahteva.'
+                setSubmitModal({
+                    isOpen: true,
+                    message,
+                    hint: 'Proveri internet konekciju i pokusaj ponovo.',
+                    variant: 'error',
+                    retrySeconds: null,
+                })
+                setSubmitError('')
+            }
         } finally {
             setIsSubmitting(false)
         }
@@ -147,13 +178,17 @@ export default function RequestFlowSection() {
                 </span>
             </button>
             <RequestSuccessModal
-                isOpen={submitSuccess}
-                onClose={() => setSubmitSuccess(false)}
-                message="Zahtev je uspešno poslat."
+                isOpen={submitModal.isOpen}
+                onClose={() => {
+                    setSubmitModal((prev) => ({ ...prev, isOpen: false }))
+                }}
+                message={submitModal.message}
+                hint={submitModal.hint}
+                variant={submitModal.variant}
+                retrySeconds={submitModal.retrySeconds}
             />
             <RequestInstallModal isOpen={showInstall} onClose={() => setShowInstall(false)} />
 
         </section>
     )
 }
-
