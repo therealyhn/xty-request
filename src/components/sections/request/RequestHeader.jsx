@@ -53,7 +53,7 @@ export default function RequestHeader({ isUnlocked }) {
         <img
           src={logo}
           alt="XTY logo"
-          className={`relative w-auto drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] transition-transform duration-500 ${isUnlocked ? 'h-[9rem] sm:h-[14rem] md:h-[16rem]' : 'h-[12rem] sm:h-[14rem] md:h-[16rem]'}`}
+          className={`relative w-auto drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] transition-transform duration-500 ${isUnlocked ? 'h-[9rem] sm:h-[14rem] md:h-[16rem]' : 'h-[8.5rem] sm:h-[14rem] md:h-[16rem]'}`}
           width={200}
           height={100}
         />
@@ -63,23 +63,25 @@ export default function RequestHeader({ isUnlocked }) {
         Zaprati nas kako bi saznali gde je sledeca <span className="font-bold text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]">XTY - Svi Za Pultom</span> zurka!
       </h1>
 
-      <div className="flex w-full max-w-[360px] flex-nowrap items-center justify-center gap-2 px-2 sm:max-w-none sm:gap-4 sm:px-0">
-        {socialLinks.map((link) => (
-          <Button
-            key={link.label}
-            variant="ghost"
-            style={{ isolation: 'isolate' }}
-            className={`group relative h-9 min-w-0 flex-1 overflow-hidden rounded-full border px-1.5 text-sm font-bold tracking-[0.06em] backdrop-blur-md transition-none sm:h-11 sm:flex-none sm:px-5 sm:text-[9px] sm:tracking-wider ${link.className}`}
-            onClick={() => window.open(link.href, '_blank', 'noopener,noreferrer')}
-            aria-label={`Open ${link.label}`}
-          >
-            <div className="relative z-10 flex items-center justify-center">
-              {link.icon}
-              <span>{link.label}</span>
-            </div>
-          </Button>
-        ))}
-      </div>
+      {isUnlocked ? (
+        <div className="flex w-full max-w-[360px] flex-nowrap items-center justify-center gap-2 px-2 sm:max-w-none sm:gap-4 sm:px-0">
+          {socialLinks.map((link) => (
+            <Button
+              key={link.label}
+              variant="ghost"
+              style={{ isolation: 'isolate' }}
+              className={`group relative h-9 min-w-0 flex-1 overflow-hidden rounded-full border px-1.5 text-sm font-bold tracking-[0.06em] backdrop-blur-md transition-none sm:h-11 sm:flex-none sm:px-5 sm:text-[9px] sm:tracking-wider ${link.className}`}
+              onClick={() => window.open(link.href, '_blank', 'noopener,noreferrer')}
+              aria-label={`Open ${link.label}`}
+            >
+              <div className="relative z-10 flex items-center justify-center">
+                {link.icon}
+                <span>{link.label}</span>
+              </div>
+            </Button>
+          ))}
+        </div>
+      ) : null}
     </div>
   )
 }

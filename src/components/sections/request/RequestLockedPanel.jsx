@@ -8,7 +8,7 @@ export default function RequestLockedPanel({ onUnlock }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
-      className="flex w-full max-w-md pt-12 flex-col gap-6"
+      className="flex w-full max-w-md pt-6 flex-col gap-6"
     >
       <div className="relative overflow-hidden rounded-sm border border-border-base bg-surface p-8 text-center shadow-2xl">
         <div className="absolute -top-24 left-1/2 h-48 w-48 -translate-x-1/2 bg-purple-500/20 blur-[100px]" />

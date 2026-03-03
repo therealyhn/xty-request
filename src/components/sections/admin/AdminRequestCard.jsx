@@ -32,7 +32,7 @@ export default function AdminRequestCard({
             <AdminStatusBadge status={item.status} />
           </div>
 
-          <h3 className="line-clamp-1 text-base font-bold leading-tight text-white group-hover:text-primary transition-colors">
+          <h3 className="text-base font-bold leading-tight text-white transition-colors group-hover:text-primary break-words">
             {item.track_title}
           </h3>
 
