@@ -1,0 +1,5 @@
+﻿User-agent: *
+Allow: /
+Host: svizapultom.xty-music.com
+
+Sitemap: https://svizapultom.xty-music.com/sitemap.xml
