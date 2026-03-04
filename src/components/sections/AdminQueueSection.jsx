@@ -209,7 +209,7 @@ export default function AdminQueueSection() {
             </>
           ) : (
             <div className="flex w-full flex-col gap-6">
-              <div className="flex flex-col gap-4 md:max-xl:grid md:max-xl:grid-cols-[250px_minmax(0,1fr)] md:max-xl:items-start md:max-xl:gap-5">
+              <div className="flex flex-col gap-4 md:max-xl:grid md:max-xl:grid-cols-2 md:max-xl:items-start md:max-xl:gap-5">
                 <AdminHeader
                   className="md:max-xl:items-start md:max-xl:text-left"
                   logoClassName="md:max-xl:h-[7.2rem]"
