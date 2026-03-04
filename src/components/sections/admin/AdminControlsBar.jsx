@@ -9,6 +9,7 @@ export default function AdminControlsBar({
   onRenameEventNameChange,
   onRenameEvent,
   onDeleteEvent,
+  onExportPdf,
   isEventsLoading,
 }) {
   return (
@@ -76,7 +77,14 @@ export default function AdminControlsBar({
           </div>
 
           <div className="xl:col-span-12">
-            <div className="flex justify-end md:max-xl:justify-start">
+            <div className="flex flex-wrap justify-end gap-2 md:max-xl:justify-start">
+              <button
+                onClick={onExportPdf}
+                className="h-[34px] rounded-xs border border-white/10 bg-white/5 px-3 text-[11px] font-bold uppercase tracking-wider text-white transition-colors hover:border-white/20 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50 sm:h-[36px] sm:text-xs"
+                disabled={isEventsLoading || !activeEventId}
+              >
+                Izvezi PDF
+              </button>
               <button
                 onClick={onDeleteEvent}
                 className="h-[34px] rounded-xs border border-red-500/25 bg-red-500/10 px-3 text-[11px] font-bold uppercase tracking-wider text-red-200 transition-colors hover:border-red-500/40 hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-50 sm:h-[36px] sm:text-xs"

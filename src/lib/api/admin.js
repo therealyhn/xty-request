@@ -142,6 +142,87 @@ export async function deleteEvent({ username, password, eventId }) {
   return response.json();
 }
 
+export async function exportRequestsPdf({ username, password, eventId, eventName }) {
+  const { jsPDF } = await import('jspdf');
+  const rows = await fetchRequests({
+    username,
+    password,
+    status: '',
+    eventId,
+  });
+
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 32;
+  const columns = [
+    { key: 'played', title: 'Pustena', width: 60 },
+    { key: 'track_title', title: 'Pesma', width: 170 },
+    { key: 'track_artist', title: 'Izvodjac', width: 120 },
+    { key: 'message', title: 'Komentar', width: pageWidth - margin * 2 - 350 },
+  ];
+
+  const drawTableHeader = (y) => {
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    let x = margin;
+    columns.forEach((col) => {
+      doc.rect(x, y, col.width, 22);
+      doc.text(col.title, x + 6, y + 14);
+      x += col.width;
+    });
+    return y + 22;
+  };
+
+  const safeEventName = (eventName || `event-${eventId}`).trim();
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.text(`XTY Requests - ${safeEventName}`, margin, 32);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.text(`Ukupno zapisa: ${rows.length}`, margin, 48);
+
+  let y = 60;
+  y = drawTableHeader(y);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+
+  rows.forEach((row) => {
+    const values = {
+      played: row.status === 'played' ? 'DA' : 'NE',
+      track_title: row.track_title || '',
+      track_artist: row.track_artist || '',
+      message: row.message || '-',
+    };
+
+    const wrapped = columns.map((col) => doc.splitTextToSize(String(values[col.key]), col.width - 10));
+    const maxLines = Math.max(...wrapped.map((lines) => lines.length), 1);
+    const rowHeight = maxLines * 12 + 8;
+
+    if (y + rowHeight > pageHeight - margin) {
+      doc.addPage();
+      y = 32;
+      y = drawTableHeader(y);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+    }
+
+    let x = margin;
+    wrapped.forEach((lines, index) => {
+      const width = columns[index].width;
+      doc.rect(x, y, width, rowHeight);
+      doc.text(lines, x + 6, y + 12);
+      x += width;
+    });
+
+    y += rowHeight;
+  });
+
+  const filename = `requests_${safeEventName.replace(/[^a-zA-Z0-9_-]/g, '_') || 'event'}.pdf`;
+  doc.save(filename);
+}
+
 export async function updateRequestStatus({ username, password, id, status }) {
   const url = buildApiUrl('/server/api/admin/update-status.php');
 

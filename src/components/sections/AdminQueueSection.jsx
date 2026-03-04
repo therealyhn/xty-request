@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import Container from '../ui/Container.jsx'
 import { useAdminQueue } from '../../hooks/useAdminQueue.js'
-import { createEvent, deleteEvent, fetchEvents, renameEvent, setActiveEvent } from '../../lib/api/admin.js'
+import { createEvent, deleteEvent, exportRequestsPdf, fetchEvents, renameEvent, setActiveEvent } from '../../lib/api/admin.js'
 import AdminHeader from './admin/AdminHeader.jsx'
 import AdminLoginPanel from './admin/AdminLoginPanel.jsx'
 import AdminControlsBar from './admin/AdminControlsBar.jsx'
@@ -191,6 +191,21 @@ export default function AdminQueueSection() {
     }
   }
 
+  const handleExportPdf = async () => {
+    if (!activeEventId || !credentials.username || !credentials.password) return
+    const activeEvent = events.find((eventItem) => eventItem.id === activeEventId)
+    try {
+      await exportRequestsPdf({
+        username: credentials.username,
+        password: credentials.password,
+        eventId: activeEventId,
+        eventName: activeEvent?.name || `event-${activeEventId}`,
+      })
+    } catch (err) {
+      setEventsError(err)
+    }
+  }
+
   return (
     <section className="relative z-10 pb-20 pt-12 md:pt-16">
       <Container className="max-w-6xl">
@@ -225,6 +240,7 @@ export default function AdminQueueSection() {
                   renameEventName={renameEventName}
                   onRenameEventNameChange={setRenameEventName}
                   onRenameEvent={handleRenameEvent}
+                  onExportPdf={handleExportPdf}
                   onDeleteEvent={() => setIsDeleteModalOpen(true)}
                   isEventsLoading={isEventsLoading}
                 />
