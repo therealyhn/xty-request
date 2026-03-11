@@ -19,7 +19,7 @@ function sendStatusPush(int $requestId, string $status, array $track): void
         return;
     }
 
-    $stmt = db()->prepare('SELECT id, endpoint, p256dh, auth FROM push_subscriptions WHERE request_id = :id');
+    $stmt = db()->prepare('SELECT endpoint, p256dh, auth FROM push_subscriptions WHERE request_id = :id');
     $stmt->execute([':id' => $requestId]);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -44,7 +44,6 @@ function sendStatusPush(int $requestId, string $status, array $track): void
         ],
     ]);
 
-    $failedIds = [];
     foreach ($rows as $row) {
         $subscription = Subscription::create([
             'endpoint' => $row['endpoint'],
@@ -54,22 +53,34 @@ function sendStatusPush(int $requestId, string $status, array $track): void
             ],
         ]);
         $webPush->queueNotification($subscription, $payload);
-        $failedIds[] = (int) $row['id'];
     }
 
     $reports = $webPush->flush();
 
+    $successCount = 0;
     $failed = [];
-    $failedEndpoints = [];
+    $invalidEndpoints = [];
     foreach ($reports as $report) {
-        if (!$report->isSuccess()) {
-            $endpoint = $report->getRequest()->getUri()->__toString();
-            $failed[] = [
-                'endpoint' => $endpoint,
-                'reason' => $report->getReason(),
-                'status' => $report->getResponse() ? $report->getResponse()->getStatusCode() : null,
-            ];
-            $failedEndpoints[$endpoint] = true;
+        if ($report->isSuccess()) {
+            $successCount++;
+            continue;
+        }
+
+        $endpoint = $report->getRequest()->getUri()->__toString();
+        $reason = (string) $report->getReason();
+        $httpStatus = $report->getResponse() ? $report->getResponse()->getStatusCode() : null;
+        $failed[] = [
+            'endpoint' => $endpoint,
+            'reason' => $reason,
+            'status' => $httpStatus,
+        ];
+
+        $reasonLower = strtolower($reason);
+        if (in_array($httpStatus, [404, 410], true)
+            || str_contains($reasonLower, 'unsubscribed')
+            || str_contains($reasonLower, 'expired')
+            || str_contains($reasonLower, 'gone')) {
+            $invalidEndpoints[$endpoint] = true;
         }
     }
 
@@ -78,20 +89,18 @@ function sendStatusPush(int $requestId, string $status, array $track): void
         $line = json_encode([
             'request_id' => $requestId,
             'status' => $status,
+            'success_count' => $successCount,
             'failed' => $failed,
             'at' => date('c'),
         ], JSON_UNESCAPED_SLASHES);
         file_put_contents($logPath, $line . PHP_EOL, FILE_APPEND);
     }
 
-    if ($failedEndpoints) {
-        $placeholders = implode(',', array_fill(0, count($failedEndpoints), '?'));
+    if ($invalidEndpoints) {
+        $placeholders = implode(',', array_fill(0, count($invalidEndpoints), '?'));
         $cleanup = db()->prepare(
-            "DELETE FROM push_subscriptions WHERE request_id = ? AND endpoint NOT IN ($placeholders)"
+            "DELETE FROM push_subscriptions WHERE request_id = ? AND endpoint IN ($placeholders)"
         );
-        $cleanup->execute(array_merge([$requestId], array_keys($failedEndpoints)));
-    } else {
-        $cleanup = db()->prepare('DELETE FROM push_subscriptions WHERE request_id = ?');
-        $cleanup->execute([$requestId]);
+        $cleanup->execute(array_merge([$requestId], array_keys($invalidEndpoints)));
     }
 }

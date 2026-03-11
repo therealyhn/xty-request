@@ -39,6 +39,7 @@ export async function subscribeToPush(requestId) {
     const base = import.meta.env.BASE_URL || '/'
     const swUrl = new URL('sw.js', window.location.origin + base)
     const swRegistration = await navigator.serviceWorker.register(swUrl)
+    await navigator.serviceWorker.ready
     const existing = await swRegistration.pushManager.getSubscription()
     const subscription =
       existing ||
@@ -47,16 +48,27 @@ export async function subscribeToPush(requestId) {
         applicationServerKey: urlBase64ToUint8Array(await getPublicKey()),
       }))
 
-    await fetch(buildApiUrl('/server/api/push/subscribe.php'), {
+    const response = await fetch(buildApiUrl('/server/api/push/subscribe.php'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         request_id: requestId,
-        subscription,
+        subscription: subscription.toJSON(),
       }),
     })
+
+    if (!response.ok) {
+      let message = 'Push subscription save failed.'
+      try {
+        const payload = await response.json()
+        if (payload?.message) message = payload.message
+      } catch (_) {
+        // keep default error message
+      }
+      throw new Error(message)
+    }
   } catch (error) {
     console.warn('Push subscribe failed:', error)
   }

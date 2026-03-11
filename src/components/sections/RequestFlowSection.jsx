@@ -73,7 +73,9 @@ export default function RequestFlowSection() {
                 track: selectedTrack,
             })
             if (result?.id) {
-                subscribeToPush(result.id).catch(() => { })
+                subscribeToPush(result.id).catch((error) => {
+                    console.warn('Push subscription failed:', error)
+                })
             }
             setMessage('')
             setSelectedTrack(null)
