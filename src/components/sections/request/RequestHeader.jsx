@@ -53,7 +53,7 @@ export default function RequestHeader({ isUnlocked }) {
         <img
           src={logo}
           alt="XTY logo"
-          className={`relative w-auto drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] transition-transform duration-500 ${isUnlocked ? 'h-[9rem] sm:h-[14rem] md:h-[16rem]' : 'h-[8.5rem] sm:h-[14rem] md:h-[16rem]'}`}
+          className={`relative w-auto drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] transition-transform duration-500 ${isUnlocked ? 'h-[9rem] sm:h-[14rem] md:h-[16rem]' : 'h-[10rem] sm:h-[18rem] md:h-[20rem]'}`}
           width={200}
           height={100}
         />
