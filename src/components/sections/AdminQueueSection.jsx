@@ -224,26 +224,30 @@ export default function AdminQueueSection() {
             </>
           ) : (
             <div className="flex w-full flex-col gap-6">
-              <div className="flex flex-col gap-4 md:max-xl:grid md:max-xl:grid-cols-2 md:max-xl:items-start md:max-xl:gap-5">
-                <AdminHeader
-                  className="md:max-xl:items-start md:max-xl:text-left"
-                  logoClassName="md:max-xl:h-[7.2rem]"
-                />
+              <div className="flex flex-col gap-4 md:max-xl:grid md:max-xl:grid-cols-12 md:max-xl:items-start md:max-xl:gap-5">
+                <div className="md:max-xl:col-span-4">
+                  <AdminHeader
+                    className="md:max-xl:items-start md:max-xl:text-left"
+                    logoClassName="md:max-xl:h-[7.2rem]"
+                  />
+                </div>
 
-                <AdminControlsBar
-                  events={events}
-                  activeEventId={activeEventId}
-                  onActiveEventChange={handleActiveEventChange}
-                  newEventName={newEventName}
-                  onNewEventNameChange={setNewEventName}
-                  onCreateEvent={handleCreateEvent}
-                  renameEventName={renameEventName}
-                  onRenameEventNameChange={setRenameEventName}
-                  onRenameEvent={handleRenameEvent}
-                  onExportPdf={handleExportPdf}
-                  onDeleteEvent={() => setIsDeleteModalOpen(true)}
-                  isEventsLoading={isEventsLoading}
-                />
+                <div className="md:max-xl:col-span-8">
+                  <AdminControlsBar
+                    events={events}
+                    activeEventId={activeEventId}
+                    onActiveEventChange={handleActiveEventChange}
+                    newEventName={newEventName}
+                    onNewEventNameChange={setNewEventName}
+                    onCreateEvent={handleCreateEvent}
+                    renameEventName={renameEventName}
+                    onRenameEventNameChange={setRenameEventName}
+                    onRenameEvent={handleRenameEvent}
+                    onExportPdf={handleExportPdf}
+                    onDeleteEvent={() => setIsDeleteModalOpen(true)}
+                    isEventsLoading={isEventsLoading}
+                  />
+                </div>
               </div>
 
               <AdminFilterBar

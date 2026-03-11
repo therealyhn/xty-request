@@ -1,4 +1,6 @@
-﻿self.addEventListener('push', (event) => {
+﻿const ICON_VERSION = '20260311'
+
+self.addEventListener('push', (event) => {
   let data = {}
   try {
     data = event.data ? event.data.json() : {}
@@ -10,7 +12,7 @@
   const status = data.status || ''
   const track = data.track || {}
   const titleMap = {
-    accepted: 'Zahtev prihvaćen',
+    accepted: 'Zahtev prihvacen',
     declined: 'Zahtev odbijen',
   }
   const title = brand
@@ -22,9 +24,9 @@
       body,
       tag: `request-${status}`,
       renotify: false,
-      icon: '/icon-512.png',
-      badge: '/favicon.png',
-      image: '/icon-512.png',
+      icon: `/icon-512.png?v=${ICON_VERSION}`,
+      badge: `/favicon.png?v=${ICON_VERSION}`,
+      image: `/icon-512.png?v=${ICON_VERSION}`,
       data: { url: '/' },
     })
   )
