@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { fetchRequests, updateRequestStatus } from '../lib/api/admin.js';
 
+const AUTO_REFRESH_MS = 2 * 60 * 1000;
+
 export function useAdminQueue({ username, password, status, eventId }) {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +36,20 @@ export function useAdminQueue({ username, password, status, eventId }) {
   useEffect(() => {
     load();
   }, [load]);
+
+  useEffect(() => {
+    if (!canFetch) return undefined;
+
+    const intervalId = window.setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        load();
+      }
+    }, AUTO_REFRESH_MS);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [canFetch, load]);
 
   const updateStatus = useCallback(
     async (id, nextStatus) => {
